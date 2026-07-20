@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nutovia - Know what you eat</title>
+<meta name="description" content="Nutovia is a free family food scanner: scan any barcode or photograph a label in any language, get an honest 0-100 health score with every reason explained, and find healthier alternatives at the stores you actually shop." />
+<meta property="og:title" content="Nutovia - Know what you eat" />
+<meta property="og:description" content="Scan any food. Get an honest, personalized health score. Find healthier swaps at your stores. Free, no ads, ever." />
+<meta property="og:image" content="https://nutovia.app/logo.png" />
+<meta property="og:url" content="https://nutovia.app" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #071410;
+    --bg-2: #0b2818;
+    --panel: rgba(255, 255, 255, 0.045);
+    --panel-strong: rgba(255, 255, 255, 0.08);
+    --line: rgba(255, 255, 255, 0.09);
+    --text: #eef7f1;
+    --muted: #9db4a7;
+    --green: #2ecc71;
+    --green-deep: #1b9e4b;
+    --amber: #f2a31b;
+    --red: #e6541f;
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: "Sora", "Inter", sans-serif; letter-spacing: -0.02em; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+
+  /* ---------- ambient background ---------- */
+  .ambient {
+    position: fixed; inset: 0; z-index: -2; overflow: hidden;
+    background:
+      radial-gradient(900px 600px at 85% -10%, rgba(46, 204, 113, 0.14), transparent 60%),
+      radial-gradient(700px 500px at -10% 30%, rgba(27, 158, 75, 0.12), transparent 60%),
+      radial-gradient(800px 700px at 50% 110%, rgba(242, 163, 27, 0.05), transparent 60%),
+      linear-gradient(180deg, #06120e 0%, var(--bg) 40%, #08150f 100%);
+  }
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(2px);
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.55), rgba(46,204,113,0.55) 32%, rgba(11,40,24,0.9) 75%);
+    box-shadow: inset -18px -24px 48px rgba(0,0,0,0.5), 0 30px 60px rgba(0,0,0,0.35);
+    opacity: 0.5; animation: drift 26s ease-in-out infinite;
+  }
+  .orb.o1 { width: 200px; height: 200px; top: 6%; left: 72%; animation-delay: 0s; }
+  .orb.o2 { width: 110px; height: 110px; top: 58%; left: 6%; animation-delay: -9s;
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.5), rgba(242,163,27,0.5) 32%, rgba(60,35,5,0.9) 75%); }
+  .orb.o3 { width: 70px; height: 70px; top: 82%; left: 84%; animation-delay: -17s; }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(-28px, 26px, 0) scale(1.05); }
+    66% { transform: translate3d(22px, -20px, 0) scale(0.97); }
+  }
+  .grain {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px clamp(20px, 5vw, 56px);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: rgba(7, 20, 16, 0.55); border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: "Sora"; font-weight: 700; font-size: 1.15rem; }
+  .brand img { width: 34px; height: 34px; }
+  .nav-links { display: flex; gap: 26px; font-size: 0.92rem; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    color: #06130c; font-weight: 600; font-size: 0.9rem;
+    padding: 9px 18px; border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(46, 204, 113, 0.35);
+  }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero {
+    min-height: 100svh; display: grid; grid-template-columns: 1.05fr 1fr;
+    align-items: center; gap: clamp(24px, 4vw, 60px);
+    padding: 120px clamp(20px, 6vw, 72px) 60px; max-width: 1260px; margin: 0 auto;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--green); background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    padding: 7px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 5.4vw, 4.3rem); font-weight: 800; line-height: 1.04;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(100deg, #7ee2a8, var(--green) 40%, #b8e986);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p.sub {
+    margin: 22px 0 30px; color: var(--muted); font-size: 1.08rem; line-height: 1.65; max-width: 34rem;
+  }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    color: #06130c; font-weight: 700; padding: 15px 26px; border-radius: 14px;
+    box-shadow: 0 10px 34px rgba(46, 204, 113, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px rgba(46, 204, 113, 0.45); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--text); font-weight: 600; padding: 15px 22px;
+    border-radius: 14px; border: 1px solid var(--line); background: var(--panel);
+    transition: background 0.2s ease;
+  }
+  .btn-ghost:hover { background: var(--panel-strong); }
+  .hero-points { display: flex; gap: 20px; margin-top: 32px; flex-wrap: wrap; color: var(--muted); font-size: 0.88rem; }
+  .hero-points span { display: inline-flex; gap: 7px; align-items: center; }
+  .hero-points b { color: var(--green); font-weight: 700; }
+
+  /* ---------- 3D phone scene ---------- */
+  .scene { perspective: 1400px; display: grid; place-items: center; position: relative; }
+  .phone {
+    width: min(310px, 78vw); aspect-ratio: 9 / 19; border-radius: 44px;
+    background: linear-gradient(160deg, #182a20, #0a1710);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow:
+      0 60px 120px rgba(0, 0, 0, 0.55),
+      0 24px 48px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255,255,255,0.12);
+    transform: rotateY(-16deg) rotateX(7deg);
+    transform-style: preserve-3d;
+    animation: phoneFloat 7s ease-in-out infinite;
+    position: relative; padding: 12px;
+    transition: transform 0.25s ease-out;
+  }
+  @keyframes phoneFloat {
+    0%, 100% { translate: 0 0; } 50% { translate: 0 -16px; }
+  }
+  .screen {
+    position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+    background: linear-gradient(180deg, #0d221708, #07140f), linear-gradient(180deg, #0e2418, #081711);
+    display: flex; flex-direction: column; padding: 42px 16px 16px;
+  }
+  .notch {
+    position: absolute; top: 12px; left: 50%; translate: -50% 0;
+    width: 34%; height: 20px; border-radius: 12px; background: #040b08;
+  }
+  .scan-beam {
+    position: absolute; left: 0; right: 0; height: 34%; top: -40%;
+    background: linear-gradient(180deg, transparent, rgba(46,204,113,0.16) 60%, rgba(46,204,113,0.5));
+    border-bottom: 2px solid rgba(126, 226, 168, 0.9);
+    animation: beam 3.6s cubic-bezier(0.45, 0, 0.4, 1) infinite;
+    pointer-events: none; mix-blend-mode: screen;
+  }
+  @keyframes beam {
+    0% { top: -40%; opacity: 0; } 12% { opacity: 1; }
+    52% { top: 105%; opacity: 1; } 60%, 100% { top: 105%; opacity: 0; }
+  }
+  .app-title { display: flex; align-items: center; gap: 7px; font-family: "Sora"; font-weight: 700; font-size: 0.8rem; margin-bottom: 12px; }
+  .app-title img { width: 18px; height: 18px; }
+  .prod-card {
+    background: rgba(255,255,255,0.05); border: 1px solid var(--line);
+    border-radius: 16px; padding: 12px; margin-bottom: 10px;
+  }
+  .prod-name { font-weight: 600; font-size: 0.82rem; }
+  .prod-brand { color: var(--muted); font-size: 0.68rem; margin-top: 1px; }
+  .ring-wrap { display: grid; place-items: center; margin: 10px 0 6px; position: relative; }
+  .ring-wrap svg { width: 118px; height: 118px; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,0.09); stroke-width: 9; }
+  .ring-val {
+    fill: none; stroke: url(#ringGrad); stroke-width: 9; stroke-linecap: round;
+    stroke-dasharray: 314; stroke-dashoffset: 314;
+    animation: ring 2.2s cubic-bezier(0.3, 0, 0.2, 1) 0.6s forwards;
+  }
+  @keyframes ring { to { stroke-dashoffset: 44; } }
+  .ring-num {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: "Sora"; font-weight: 800; font-size: 1.9rem; color: #7ee2a8;
+  }
+  .ring-label { text-align: center; color: var(--muted); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .reasons { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .reason {
+    display: flex; gap: 7px; align-items: center; font-size: 0.66rem; color: #cfe0d5;
+    background: rgba(255,255,255,0.04); border-radius: 9px; padding: 6px 9px;
+    opacity: 0; transform: translateY(6px); animation: rIn 0.5s ease forwards;
+  }
+  .reason:nth-child(1) { animation-delay: 1.4s; }
+  .reason:nth-child(2) { animation-delay: 1.7s; }
+  .reason:nth-child(3) { animation-delay: 2s; }
+  @keyframes rIn { to { opacity: 1; transform: none; } }
+  .reason .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* floating chips around phone */
+  .float-chip {
+    position: absolute; display: flex; align-items: center; gap: 9px;
+    background: rgba(13, 30, 22, 0.82); border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    border-radius: 15px; padding: 10px 14px; font-size: 0.78rem; font-weight: 600;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    animation: chipFloat 6s ease-in-out infinite;
+  }
+  .float-chip .big { font-size: 1.25rem; }
+  .float-chip small { display: block; color: var(--muted); font-weight: 500; font-size: 0.66rem; }
+  .fc1 { top: 8%; left: -6%; animation-delay: -1s; }
+  .fc2 { bottom: 20%; left: -14%; animation-delay: -3s; }
+  .fc3 { top: 26%; right: -10%; animation-delay: -2s; }
+  .fc4 { bottom: 6%; right: -4%; animation-delay: -4.5s; }
+  @keyframes chipFloat { 0%,100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+  .score-pill { padding: 2px 8px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: #06130c; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 108px; }
+    .hero p.sub { margin-inline: auto; }
+    .cta-row, .hero-points { justify-content: center; }
+    .scene { margin-top: 26px; }
+    .fc2 { left: -2%; } .fc3 { right: -2%; }
+  }
+
+  /* ---------- sections ---------- */
+  section { max-width: 1160px; margin: 0 auto; padding: clamp(64px, 9vw, 120px) clamp(20px, 5vw, 48px); }
+  .sec-eyebrow { color: var(--green); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+  .sec-title { font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 800; line-height: 1.15; max-width: 34rem; }
+  .sec-sub { color: var(--muted); margin-top: 16px; max-width: 40rem; line-height: 1.65; }
+  .center { text-align: center; }
+  .center .sec-title, .center .sec-sub { margin-inline: auto; }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; perspective: 1200px; }
+  .step {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 30px 26px; transition: transform 0.35s ease, background 0.35s ease;
+    transform-style: preserve-3d;
+  }
+  .step:hover { transform: rotateX(4deg) rotateY(-5deg) translateY(-6px); background: var(--panel-strong); }
+  .step .icon3d {
+    width: 62px; height: 62px; display: grid; place-items: center; font-size: 1.7rem;
+    border-radius: 18px; margin-bottom: 20px;
+    background: linear-gradient(150deg, rgba(46,204,113,0.22), rgba(46,204,113,0.05));
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    transform: translateZ(30px);
+  }
+  .step h3 { font-size: 1.12rem; margin-bottom: 10px; }
+  .step p { color: var(--muted); font-size: 0.93rem; line-height: 1.6; }
+  .step .num { color: rgba(255,255,255,0.14); font-family: "Sora"; font-weight: 800; font-size: 2rem; float: right; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+  /* barcode cube */
+  .cube-wrap { perspective: 700px; width: 44px; height: 44px; }
+  .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: spinCube 9s linear infinite; }
+  .cube div {
+    position: absolute; inset: 0; border: 1px solid rgba(126,226,168,0.5); border-radius: 6px;
+    background:
+      repeating-linear-gradient(90deg, #dff5e7 0 3px, transparent 3px 6px, #dff5e7 6px 8px, transparent 8px 13px),
+      rgba(10, 26, 18, 0.92);
+    background-size: 100% 68%; background-repeat: no-repeat; background-position: center;
+  }
+  .cube .f1 { transform: translateZ(22px); }
+  .cube .f2 { transform: rotateY(90deg) translateZ(22px); }
+  .cube .f3 { transform: rotateY(180deg) translateZ(22px); }
+  .cube .f4 { transform: rotateY(270deg) translateZ(22px); }
+  .cube .f5 { transform: rotateX(90deg) translateZ(22px); background: rgba(10, 26, 18, 0.95); }
+  .cube .f6 { transform: rotateX(-90deg) translateZ(22px); background: rgba(10, 26, 18, 0.95); }
+  @keyframes spinCube { to { transform: rotateY(360deg) rotateX(360deg); } }
+
+  /* provenance trail */
+  .trail-panel {
+    margin-top: 48px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 24px; padding: clamp(26px, 4vw, 44px);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  }
+  .trail { display: flex; flex-direction: column; gap: 0; }
+  .t-node { display: flex; gap: 16px; }
+  .t-rail { display: flex; flex-direction: column; align-items: center; }
+  .t-dot {
+    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid rgba(255,255,255,0.18); font-size: 0.82rem; font-weight: 700;
+    background: rgba(255,255,255,0.04); transition: all 0.4s ease; flex-shrink: 0;
+  }
+  .t-line { width: 2px; flex: 1; min-height: 26px; background: rgba(255,255,255,0.12); }
+  .t-card { padding: 4px 0 22px; }
+  .t-card b { font-size: 0.95rem; }
+  .t-card span { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+  .t-node.active .t-dot { border-color: var(--green); background: var(--green); color: #06130c; box-shadow: 0 0 24px rgba(46,204,113,0.5); }
+  .t-node.done .t-dot { border-color: var(--green); color: var(--green); }
+  .t-node.dim .t-dot { opacity: 0.5; }
+  @media (max-width: 860px) { .trail-panel { grid-template-columns: 1fr; } }
+
+  /* feature grid */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+  .cell {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 26px; transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .cell:hover { transform: translateY(-5px); background: var(--panel-strong); }
+  .cell .emo { font-size: 1.6rem; }
+  .cell h3 { font-size: 1.02rem; margin: 14px 0 8px; }
+  .cell p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+  .cell.wide { grid-column: span 2; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .cell.wide { grid-column: span 1; } }
+
+  /* language strip */
+  .lang-strip {
+    margin-top: 44px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; perspective: 900px;
+  }
+  .lang {
+    font-family: "Sora"; font-weight: 600; font-size: 0.95rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 20px; animation: langFloat 7s ease-in-out infinite;
+  }
+  .lang small { display: block; color: var(--muted); font-weight: 400; font-size: 0.7rem; margin-top: 3px; }
+  .lang:nth-child(odd) { animation-delay: -3.5s; }
+  @keyframes langFloat {
+    0%, 100% { transform: translateY(0) rotateX(0); }
+    50% { transform: translateY(-9px) rotateX(6deg); }
+  }
+
+  /* swap visual */
+  .swap-panel {
+    margin-top: 48px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 24px;
+    padding: clamp(26px, 4vw, 44px);
+  }
+  .swap-card {
+    background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; text-align: center;
+  }
+  .swap-card .big { font-size: 2.2rem; }
+  .swap-card b { display: block; margin-top: 8px; font-size: 0.95rem; }
+  .swap-card span { color: var(--muted); font-size: 0.8rem; }
+  .swap-score { font-family: "Sora"; font-weight: 800; font-size: 1.6rem; margin-top: 8px; }
+  .swap-arrow { font-size: 1.9rem; color: var(--green); animation: nudge 2s ease-in-out infinite; }
+  @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+  .store-chips { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; margin-top: 30px; }
+  .store-chip {
+    font-size: 0.8rem; color: var(--muted); border: 1px solid var(--line);
+    border-radius: 999px; padding: 7px 15px; background: rgba(255,255,255,0.03);
+  }
+  @media (max-width: 720px) { .swap-panel { grid-template-columns: 1fr; } .swap-arrow { transform: rotate(90deg); text-align: center; } }
+
+  /* pricing */
+  .price-card {
+    margin: 48px auto 0; max-width: 620px; text-align: center;
+    background: linear-gradient(160deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03));
+    border: 1px solid rgba(46, 204, 113, 0.35); border-radius: 28px;
+    padding: clamp(34px, 5vw, 54px);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.35);
+  }
+  .price-card .zero { font-family: "Sora"; font-weight: 800; font-size: clamp(3rem, 7vw, 4.6rem); color: #7ee2a8; }
+  .price-card p { color: var(--muted); line-height: 1.7; margin-top: 14px; }
+
+  /* footer */
+  footer {
+    border-top: 1px solid var(--line); padding: 44px clamp(20px, 5vw, 56px);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px;
+    color: var(--muted); font-size: 0.88rem;
+  }
+  .foot-links { display: flex; gap: 22px; }
+  .foot-links a:hover { color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .ring-val { stroke-dashoffset: 44; }
+    .reason { opacity: 1; transform: none; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+</div>
+<div class="grain"></div>
+
+<nav>
+  <a class="brand" href="#top"><img src="logo.png" alt="Nutovia logo" /> Nutovia</a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+  <a class="nav-cta" href="#get">Get the app</a>
+</nav>
+
+<header class="hero" id="top">
+  <div>
+    <span class="eyebrow">✦ Free forever · No ads · No data sales</span>
+    <h1>Know <span class="grad">exactly</span> what your family eats.</h1>
+    <p class="sub">
+      Scan any barcode - or photograph a nutrition label in any language - and get an
+      honest 0-100 score with every reason explained in plain words. Personalized to each
+      family member's diets, allergies, and goals. Then find healthier swaps at the
+      stores you actually shop.
+    </p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#get">&#63743; Coming soon to the App Store</a>
+      <a class="btn-ghost" href="#how">See how it works ↓</a>
+    </div>
+    <div class="hero-points">
+      <span><b>✓</b> Official Nutri-Score 2023</span>
+      <span><b>✓</b> 4 data sources, shown honestly</span>
+      <span><b>✓</b> Reads labels in any language</span>
+    </div>
+  </div>
+
+  <div class="scene" id="scene">
+    <div class="phone" id="phone">
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="scan-beam"></div>
+        <div class="app-title"><img src="logo.png" alt="" /> Nutovia</div>
+        <div class="prod-card">
+          <div class="prod-name">Honey Oat Granola</div>
+          <div class="prod-brand">Golden Valley · 340 g</div>
+        </div>
+        <div class="ring-wrap">
+          <svg viewBox="0 0 110 110">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#7ee2a8" /><stop offset="1" stop-color="#1b9e4b" />
+              </linearGradient>
+            </defs>
+            <circle class="ring-bg" cx="55" cy="55" r="50"></circle>
+            <circle class="ring-val" cx="55" cy="55" r="50"></circle>
+          </svg>
+          <div class="ring-num" id="scoreNum">0</div>
+        </div>
+        <div class="ring-label">Nutovia Score · for Maya</div>
+        <div class="reasons">
+          <div class="reason"><span class="dot" style="background:#2ecc71"></span> High fiber - 9 g per 100 g</div>
+          <div class="reason"><span class="dot" style="background:#f2a31b"></span> Moderate added sugar</div>
+          <div class="reason"><span class="dot" style="background:#2ecc71"></span> No flagged additives</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="float-chip fc1"><span class="big">🥦</span><div>Broccoli &amp; Greens<small>Nutovia Score</small></div><span class="score-pill" style="background:#2ecc71">96</span></div>
+    <div class="float-chip fc2"><span class="big">🥤</span><div>Fizzy Cola<small>Nutovia Score</small></div><span class="score-pill" style="background:#e6541f;color:#fff">22</span></div>
+    <div class="float-chip fc3"><span class="big">⚠️</span><div>Contains peanuts<small>Blocked for Sam</small></div></div>
+    <div class="float-chip fc4"><span class="big">✨</span><div>3 healthier swaps<small>at your stores</small></div></div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="reveal">
+    <div class="sec-eyebrow">How it works</div>
+    <h2 class="sec-title">Scan. Score. Swap.</h2>
+    <p class="sec-sub">Three steps from "what is this?" to a better basket - built for real grocery aisles, not lab conditions.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <span class="num">01</span>
+      <div class="icon3d"><div class="cube-wrap"><div class="cube"><div class="f1"></div><div class="f2"></div><div class="f3"></div><div class="f4"></div><div class="f5"></div><div class="f6"></div></div></div></div>
+      <h3>Scan anything</h3>
+      <p>Point at any barcode. No barcode or no match? Photograph the nutrition label - Nutovia reads English, Spanish, French, German, Japanese, Chinese, Korean, Hindi and more, automatically.</p>
+    </div>
+    <div class="step reveal">
+      <span class="num">02</span>
+      <div class="icon3d">💯</div>
+      <h3>Get an honest score</h3>
+      <p>A 0-100 score built on the official Nutri-Score 2023 model, adjusted for ultra-processing, flagged additives, and each family member's goals. Every point explained - never a bare number.</p>
+    </div>
+    <div class="step reveal">
+      <span class="num">03</span>
+      <div class="icon3d">🔁</div>
+      <h3>Swap smarter</h3>
+      <p>Below your healthy threshold? Nutovia ranks better products in the same category - starting with what's confirmed at the stores you shop - and one tap opens them in the store's own app.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Radical transparency</div>
+    <h2 class="sec-title">You always see where the data came from.</h2>
+    <p class="sec-sub">
+      Every scan replays its search as a live flowchart. If a product is missing everywhere,
+      AI researches the web - and those results are clearly marked and held to a lower level
+      of trust, with the sources to check.
+    </p>
+  </div>
+  <div class="trail-panel reveal">
+    <div class="trail" id="trail">
+      <div class="t-node" data-i="0"><div class="t-rail"><div class="t-dot">1</div><div class="t-line"></div></div><div class="t-card"><b>Nutovia Product Database</b><span>Community catalog - instant when someone scanned it before</span></div></div>
+      <div class="t-node" data-i="1"><div class="t-rail"><div class="t-dot">2</div><div class="t-line"></div></div><div class="t-card"><b>Open Food Facts</b><span>Global community food database</span></div></div>
+      <div class="t-node" data-i="2"><div class="t-rail"><div class="t-dot">3</div><div class="t-line"></div></div><div class="t-card"><b>USDA FoodData Central</b><span>Official U.S. database of branded foods</span></div></div>
+      <div class="t-node" data-i="3"><div class="t-rail"><div class="t-dot">✦</div></div><div class="t-card"><b>AI web research</b><span>Last resort - clearly marked, verify against the label</span></div></div>
+    </div>
+    <div>
+      <h3 style="font-size:1.25rem; margin-bottom:12px;">No black boxes.</h3>
+      <p style="color:var(--muted); line-height:1.7; font-size:0.95rem;">
+        Most food apps show you a grade and ask you to trust it. Nutovia shows its work:
+        which database answered, what was missing, and why the score is what it is.
+        When data is unverified, the app says so - because your family's food choices
+        deserve honesty, not confidence theater.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="reveal center">
+    <div class="sec-eyebrow">Built for families</div>
+    <h2 class="sec-title">One scan, a verdict for everyone.</h2>
+  </div>
+  <div class="grid">
+    <div class="cell reveal"><div class="emo">👨‍👩‍👧‍👦</div><h3>A profile per person</h3><p>Diets, health goals, and allergies for each family member. One scan shows who it's good for - and who should skip it.</p></div>
+    <div class="cell reveal"><div class="emo">🚫</div><h3>Allergens are hard stops</h3><p>An allergen match doesn't lower the score - it zeroes it, with a clear warning. When in doubt, Nutovia leaves it out.</p></div>
+    <div class="cell reveal"><div class="emo">🌍</div><h3>Any label, any language</h3><p>On-device reading for Latin, Japanese, Chinese, Korean, and Hindi scripts - AI interprets the rest. No settings needed.</p></div>
+    <div class="cell reveal"><div class="emo">🏪</div><h3>Your stores, not "a store"</h3><p>Pick every chain you shop - from Walmart and Kroger to Amazon and Instacart. Alternatives are matched against all of them.</p></div>
+    <div class="cell reveal"><div class="emo">📚</div><h3>History that works for you</h3><p>Every scan saved per family member, searchable and filterable by score. Swipe to remove - your data, your call.</p></div>
+    <div class="cell reveal"><div class="emo">🔒</div><h3>Private by design</h3><p>Your household's data stays in your household. No ads, no trackers, no data sales. Export everything anytime.</p></div>
+  </div>
+</section>
+
+<section class="center">
+  <div class="reveal">
+    <div class="sec-eyebrow">Any language</div>
+    <h2 class="sec-title">The label doesn't have to be in English.</h2>
+    <p class="sec-sub">Imported snacks, international markets, travel finds - photograph the label and Nutovia understands it.</p>
+  </div>
+  <div class="lang-strip reveal">
+    <div class="lang">栄養成分表示<small>Japanese</small></div>
+    <div class="lang">Información Nutricional<small>Spanish</small></div>
+    <div class="lang">영양성분<small>Korean</small></div>
+    <div class="lang">Nährwertangaben<small>German</small></div>
+    <div class="lang">营养成分表<small>Chinese</small></div>
+    <div class="lang">पोषण तथ्य<small>Hindi</small></div>
+    <div class="lang">Valeurs nutritionnelles<small>French</small></div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal center">
+    <div class="sec-eyebrow">Healthier alternatives</div>
+    <h2 class="sec-title">Don't just judge the product. Beat it.</h2>
+    <p class="sec-sub">Same category, better nutrition, honestly labeled availability - personalized to the person you're shopping for, with AI research to widen the hunt.</p>
+  </div>
+  <div class="swap-panel reveal">
+    <div class="swap-card">
+      <span class="big">🥣</span>
+      <b>Frosted Choco Puffs</b>
+      <span>ultra-processed · high sugar</span>
+      <div class="swap-score" style="color:#e6541f">38</div>
+    </div>
+    <div class="swap-arrow">➜</div>
+    <div class="swap-card" style="border-color: rgba(46,204,113,0.4);">
+      <span class="big">🌾</span>
+      <b>Plain Oat Flakes</b>
+      <span>✓ confirmed at your Kroger</span>
+      <div class="swap-score" style="color:#2ecc71">86 <small style="font-size:0.8rem">(+48)</small></div>
+    </div>
+  </div>
+  <div class="store-chips reveal">
+    <span class="store-chip">Walmart</span><span class="store-chip">Target</span><span class="store-chip">Kroger</span>
+    <span class="store-chip">Costco</span><span class="store-chip">Safeway</span><span class="store-chip">Vons</span>
+    <span class="store-chip">Whole Foods</span><span class="store-chip">Trader Joe's</span><span class="store-chip">H-E-B</span>
+    <span class="store-chip">Amazon 🌐</span><span class="store-chip">Instacart 🌐</span><span class="store-chip">+ 50 more</span>
+  </div>
+</section>
+
+<section id="pricing" class="center">
+  <div class="reveal">
+    <div class="sec-eyebrow">Pricing</div>
+    <h2 class="sec-title">Free. Actually free.</h2>
+  </div>
+  <div class="price-card reveal">
+    <div class="zero">$0</div>
+    <p>
+      All features. Every family member. No subscription, no ads, no data sales.
+      We intend to keep it that way - the only thing that could ever change this is
+      if the data providers behind the app start charging us, and if that day comes,
+      you'll hear it from us clearly and in advance.
+    </p>
+  </div>
+</section>
+
+<section id="get" class="center" style="padding-bottom: 80px;">
+  <div class="reveal">
+    <h2 class="sec-title" style="max-width:none;">Coming soon to the App Store.</h2>
+    <p class="sec-sub">Nutovia is in final preparation for iOS. Questions, ideas, or want to know when it lands?</p>
+    <div class="cta-row" style="justify-content:center; margin-top:28px;">
+      <a class="btn-primary" href="mailto:admin@nutovia.app?subject=Notify%20me%20-%20Nutovia">✉️ admin@nutovia.app</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand" style="font-size:1rem;"><img src="logo.png" alt="" style="width:26px;height:26px;" /> Nutovia</div>
+  <div class="foot-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:admin@nutovia.app">Contact</a>
+  </div>
+  <div>© 2026 Nutovia. Wellness guidance, not medical advice - always check the label.</div>
+</footer>
+
+<script>
+  // score count-up
+  (function () {
+    const el = document.getElementById('scoreNum');
+    const target = 86; const start = performance.now(); const delay = 600; const dur = 2200;
+    function tick(t) {
+      const p = Math.min(1, Math.max(0, (t - start - delay) / dur));
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // pointer tilt on the phone
+  (function () {
+    const scene = document.getElementById('scene');
+    const phone = document.getElementById('phone');
+    if (!scene || !phone || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    scene.addEventListener('pointermove', (e) => {
+      const r = scene.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      phone.style.transform = `rotateY(${-16 + x * 14}deg) rotateX(${7 - y * 10}deg)`;
+    });
+    scene.addEventListener('pointerleave', () => {
+      phone.style.transform = '';
+    });
+  })();
+
+  // scroll reveals
+  (function () {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  })();
+
+  // provenance trail loop: 1 miss -> 2 miss -> 3 miss -> AI active, then restart
+  (function () {
+    const nodes = [...document.querySelectorAll('#trail .t-node')];
+    let step = 0;
+    function paint() {
+      nodes.forEach((n, i) => {
+        n.classList.remove('active', 'done', 'dim');
+        if (i < step) n.classList.add('done');
+        else if (i === step) n.classList.add('active');
+        else n.classList.add('dim');
+      });
+      step = (step + 1) % (nodes.length + 2); // pause beats at the end
+    }
+    paint();
+    setInterval(paint, 1400);
+  })();
+</script>
+</body>
+</html>
