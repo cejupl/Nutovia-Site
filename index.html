@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nutovia - Know what you eat</title>
-<meta name="description" content="Nutovia is a free family food scanner: scan any barcode or photograph a label in any language, get an honest 0-100 health score with every reason explained, and find healthier alternatives at the stores you actually shop." />
+<meta name="description" content="Nutovia is a free family food scanner: scan a barcode, photograph a label in any language, or search 630,000 scored products. Get an honest 0-100 health score with every reason on a scale you can read, personalized per family member, plus healthier swaps at the stores you actually shop." />
 <meta property="og:title" content="Nutovia - Know what you eat" />
-<meta property="og:description" content="Scan any food. Get an honest, personalized health score. Find healthier swaps at your stores. Free, no ads, ever." />
+<meta property="og:description" content="Scan or search any food. An honest 0-100 score, every reason on a visible scale, personalized for each family member. Healthier swaps at your stores. Free, no ads, ever." />
 <meta property="og:image" content="https://nutovia.app/logo.png" />
 <meta property="og:url" content="https://nutovia.app" />
 <link rel="icon" type="image/png" href="favicon.png" />
@@ -376,6 +376,50 @@
   }
   @media (max-width: 720px) { .swap-panel { grid-template-columns: 1fr; } .swap-arrow { transform: rotate(90deg); text-align: center; } }
 
+  /* why this score */
+  .score-why {
+    margin-top: 48px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 24px; padding: clamp(26px, 4vw, 44px);
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 4vw, 48px);
+    align-items: start; text-align: left;
+  }
+  .sw-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 6px; }
+  .sw-head b { font-size: 1.02rem; }
+  .sw-head .sw-score { font-family: "Sora"; font-weight: 800; font-size: 1.5rem; color: #7ee2a8; }
+  .sw-cap { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.02em; }
+
+  .axis { padding: 15px 0; border-bottom: 1px solid var(--line); }
+  .axis:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .axis-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .axis-name { font-weight: 600; font-size: 0.94rem; }
+  .axis-val { color: var(--muted); font-size: 0.82rem; text-align: right; }
+  .axis-track {
+    position: relative; height: 7px; border-radius: 999px; margin-top: 11px;
+    background: linear-gradient(90deg, #2ecc71, #a8d84a 36%, #f2a31b 66%, #e6541f);
+  }
+  .axis-track.rev { background: linear-gradient(90deg, #e6541f, #f2a31b 34%, #a8d84a 64%, #2ecc71); }
+  .axis-pin {
+    position: absolute; top: 50%; width: 13px; height: 13px; border-radius: 50%;
+    background: #fff; border: 3px solid #08170f; transform: translate(-50%, -50%);
+    box-shadow: 0 2px 9px rgba(0,0,0,0.55);
+  }
+  .axis-ends { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  .fam-panel { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .fam-title { font-size: 0.98rem; font-weight: 700; }
+  .fam-sub { color: var(--muted); font-size: 0.82rem; margin-top: 5px; line-height: 1.5; }
+  .fam-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .fam-row:last-of-type { border-bottom: 0; }
+  .fam-who { font-weight: 600; font-size: 0.92rem; }
+  .fam-why { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 3px; line-height: 1.45; }
+  .fam-delta { font-family: "Sora"; font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+  .fam-delta.down { color: #e6541f; }
+  .fam-delta.up { color: #2ecc71; }
+  .fam-delta.stop { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #e6541f; }
+  .fam-foot { color: var(--muted); font-size: 0.78rem; line-height: 1.6; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 900px) { .score-why { grid-template-columns: 1fr; } }
+
   /* pricing */
   .founding-strip {
     margin: 44px auto 0; max-width: 780px;
@@ -471,6 +515,7 @@
   <a class="brand" href="#top"><img src="logo.png" alt="Nutovia logo" /> Nutovia</a>
   <div class="nav-links">
     <a href="#how">How it works</a>
+    <a href="#why">Scoring</a>
     <a href="#features">Features</a>
     <a href="#pricing">Pricing</a>
     <a href="privacy.html">Privacy</a>
@@ -483,20 +528,20 @@
     <span class="eyebrow">✦ Free to scan, forever · No ads · No data sales</span>
     <h1>Know <span class="grad">exactly</span> what your family eats.</h1>
     <p class="sub">
-      Scan any barcode - or photograph a nutrition label in any language - and get two
-      honest scores side by side: the product's own 0-100 score, and your family's
-      average built from each member's diets, allergies, and goals. Every point
-      explained in plain words. Then find healthier swaps at the stores you actually
-      shop.
+      Scan a barcode, photograph a label in any language, or search 630,000 scored
+      products. You get two honest scores side by side - the product's own 0-100, and
+      your family's average built from each member's diets, allergies and goals - with
+      every point placed on a scale you can read. Then swap it for something better at
+      the stores you actually shop.
     </p>
     <div class="cta-row">
       <a class="btn-primary" href="#get">&#63743; Coming soon to the App Store</a>
       <a class="btn-ghost" href="#how">See how it works ↓</a>
     </div>
     <div class="hero-points">
-      <span><b>✓</b> Official Nutri-Score 2023</span>
-      <span><b>✓</b> 4 data sources, shown honestly</span>
-      <span><b>✓</b> Reads labels in any language</span>
+      <span><b>✓</b> Search 630,000+ scored products</span>
+      <span><b>✓</b> Every point on a visible scale</span>
+      <span><b>✓</b> Swaps at the stores you shop</span>
     </div>
   </div>
 
@@ -566,8 +611,8 @@
     <div class="step reveal">
       <span class="num">01</span>
       <div class="icon3d"><div class="cube-wrap"><div class="cube"><div class="f1"></div><div class="f2"></div><div class="f3"></div><div class="f4"></div><div class="f5"></div><div class="f6"></div></div></div></div>
-      <h3>Scan anything</h3>
-      <p>Point at any barcode. No barcode or no match? Photograph the nutrition label - Nutovia reads English, Spanish, French, German, Japanese, Chinese, Korean, Hindi and more, automatically.</p>
+      <h3>Find anything</h3>
+      <p>Point at any barcode, or search the catalog by name, shelf or what matters to you - low sugar, high fibre, minimally processed. No barcode and no match? Photograph the label; Nutovia reads it in any language, automatically.</p>
     </div>
     <div class="step reveal">
       <span class="num">02</span>
@@ -613,17 +658,89 @@
   </div>
 </section>
 
+<section id="why">
+  <div class="reveal center">
+    <div class="sec-eyebrow">Why this score</div>
+    <h2 class="sec-title">Every point, on a scale you can see.</h2>
+    <p class="sec-sub">
+      Ten measures sit behind every score - sugar, salt, saturated fat, fibre, protein,
+      processing and more. Each one shows where the product actually lands, not just
+      whether it passed. Then the same product is re-scored for each person at home.
+    </p>
+  </div>
+
+  <div class="score-why reveal">
+    <div>
+      <div class="sw-head">
+        <b>Banana Bread Bar</b>
+        <span class="sw-score">88</span>
+      </div>
+      <div class="sw-cap">Product score, before anyone's profile is applied</div>
+
+      <div class="axis">
+        <div class="axis-top"><span class="axis-name">Sugar</span><span class="axis-val">37.8g per 100g</span></div>
+        <div class="axis-track"><span class="axis-pin" style="left:84%"></span></div>
+        <div class="axis-ends"><span>None</span><span>Very high</span></div>
+      </div>
+      <div class="axis">
+        <div class="axis-top"><span class="axis-name">Added sugar</span><span class="axis-val">none - it is all fruit</span></div>
+        <div class="axis-track"><span class="axis-pin" style="left:3%"></span></div>
+        <div class="axis-ends"><span>None</span><span>Very high</span></div>
+      </div>
+      <div class="axis">
+        <div class="axis-top"><span class="axis-name">Saturated fat</span><span class="axis-val">2.2g per 100g</span></div>
+        <div class="axis-track"><span class="axis-pin" style="left:17%"></span></div>
+        <div class="axis-ends"><span>None</span><span>Very high</span></div>
+      </div>
+      <div class="axis">
+        <div class="axis-top"><span class="axis-name">Fibre</span><span class="axis-val">8.9g per 100g</span></div>
+        <div class="axis-track rev"><span class="axis-pin" style="left:80%"></span></div>
+        <div class="axis-ends"><span>None</span><span>Excellent</span></div>
+      </div>
+      <div class="axis">
+        <div class="axis-top"><span class="axis-name">Processing</span><span class="axis-val">whole food, NOVA 1</span></div>
+        <div class="axis-track rev"><span class="axis-pin" style="left:94%"></span></div>
+        <div class="axis-ends"><span>Ultra-processed</span><span>Whole food</span></div>
+      </div>
+    </div>
+
+    <div class="fam-panel">
+      <div class="fam-title">The same bar, per person</div>
+      <p class="fam-sub">Each profile carries its own goals, diets and allergies - so one scan answers for everybody at once.</p>
+
+      <div class="fam-row">
+        <span class="fam-who">Ada<span class="fam-why">Watching sugar - 37.8g is very high, even from fruit</span></span>
+        <span class="fam-delta down">-18</span>
+      </div>
+      <div class="fam-row">
+        <span class="fam-who">Sam<span class="fam-why">Building muscle - 11.1g protein is a solid source</span></span>
+        <span class="fam-delta up">+8</span>
+      </div>
+      <div class="fam-row">
+        <span class="fam-who">Leo<span class="fam-why">Tree-nut allergy - contains almonds</span></span>
+        <span class="fam-delta stop">Avoid</span>
+      </div>
+
+      <p class="fam-foot">
+        Goals move a score by at most +15 or -30. The product's own nutrition carries
+        the rest - your profile adjusts a score, it never replaces it. An allergen is
+        different: it is a hard stop, not a deduction.
+      </p>
+    </div>
+  </div>
+</section>
+
 <section id="features">
   <div class="reveal center">
     <div class="sec-eyebrow">Built for families</div>
     <h2 class="sec-title">One scan, a verdict for everyone.</h2>
   </div>
   <div class="grid">
-    <div class="cell reveal"><div class="emo">👨‍👩‍👧‍👦</div><h3>A score per person</h3><p>Diets, health goals, and allergies for each family member. One scan shows the product score, the family average, and exactly who should skip it.</p></div>
+    <div class="cell reveal"><div class="emo">👨‍👩‍👧‍👦</div><h3>A score per person</h3><p>Diets, goals and allergies for each family member. One scan shows the product score, the family average, and exactly who should skip it.</p></div>
+    <div class="cell reveal"><div class="emo">🔍</div><h3>Search before you shop</h3><p>630,000 products, every one already scored, ranked best first. Search by name or brand, browse a shelf, or filter by low sugar, high fibre and minimally processed.</p></div>
     <div class="cell reveal"><div class="emo">🚫</div><h3>Allergens are hard stops</h3><p>An allergen match doesn't lower the score - it zeroes it, with a clear warning. When in doubt, Nutovia leaves it out.</p></div>
-    <div class="cell reveal"><div class="emo">🌍</div><h3>Any label, any language</h3><p>On-device reading for Latin, Japanese, Chinese, Korean, and Hindi scripts - AI interprets the rest. No settings needed.</p></div>
-    <div class="cell reveal"><div class="emo">🏪</div><h3>Your stores, not "a store"</h3><p>Pick every chain you shop - from Walmart and Kroger to Amazon and Instacart. Alternatives are matched against all of them.</p></div>
-    <div class="cell reveal"><div class="emo">📚</div><h3>History that works for you</h3><p>Every scan saved per family member, searchable and filterable by score. Swipe to remove - your data, your call.</p></div>
+    <div class="cell reveal"><div class="emo">🏪</div><h3>Your stores, your list</h3><p>Pick every chain you shop, from Walmart and Kroger to Amazon and Instacart. Save products to each store's list, and see what other shoppers have confirmed is on the shelf.</p></div>
+    <div class="cell reveal"><div class="emo">📚</div><h3>History that works for you</h3><p>A full year of scans per family member, searchable and filterable by score. Favourite the ones worth keeping and they stay forever.</p></div>
     <div class="cell reveal"><div class="emo">🔒</div><h3>Private by design</h3><p>Your household's data stays in your household. No ads, no trackers, no data sales. Export everything anytime.</p></div>
   </div>
 </section>
