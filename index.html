@@ -377,15 +377,70 @@
   @media (max-width: 720px) { .swap-panel { grid-template-columns: 1fr; } .swap-arrow { transform: rotate(90deg); text-align: center; } }
 
   /* pricing */
-  .price-card {
-    margin: 48px auto 0; max-width: 620px; text-align: center;
-    background: linear-gradient(160deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03));
-    border: 1px solid rgba(46, 204, 113, 0.35); border-radius: 28px;
-    padding: clamp(34px, 5vw, 54px);
-    box-shadow: 0 40px 90px rgba(0,0,0,0.35);
+  .founding-strip {
+    margin: 44px auto 0; max-width: 780px;
+    display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    background: linear-gradient(160deg, rgba(46,204,113,0.16), rgba(46,204,113,0.04));
+    border: 1px solid rgba(46, 204, 113, 0.38); border-radius: 18px;
+    padding: 18px 26px; text-align: left;
   }
-  .price-card .zero { font-family: "Sora"; font-weight: 800; font-size: clamp(3rem, 7vw, 4.6rem); color: #7ee2a8; }
-  .price-card p { color: var(--muted); line-height: 1.7; margin-top: 14px; }
+  .founding-strip .fs-mark { font-size: 1.5rem; line-height: 1; }
+  .founding-strip b { color: #7ee2a8; }
+  .founding-strip span { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+
+  .price-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    margin-top: 28px; text-align: left; align-items: stretch;
+  }
+  .tier {
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 24px;
+    padding: 32px 28px; transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .tier:hover { transform: translateY(-4px); border-color: rgba(46,204,113,0.35); }
+  .tier.featured {
+    background: linear-gradient(165deg, rgba(46,204,113,0.15), rgba(46,204,113,0.03));
+    border-color: rgba(46, 204, 113, 0.45);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.38);
+  }
+  .tier-badge {
+    align-self: flex-start; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 6px 12px; border-radius: 999px; margin-bottom: 16px;
+    background: rgba(46,204,113,0.16); border: 1px solid rgba(46,204,113,0.4); color: #7ee2a8;
+  }
+  .tier-badge.quiet { background: rgba(255,255,255,0.05); border-color: var(--line); color: var(--muted); }
+  .tier-name { font-family: "Sora"; font-weight: 700; font-size: 1.15rem; }
+  .tier-cost { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .tier-was {
+    font-family: "Sora"; font-weight: 700; font-size: 1.5rem; color: var(--muted);
+    text-decoration: line-through; text-decoration-thickness: 2px; opacity: 0.75;
+  }
+  .tier-now { font-family: "Sora"; font-weight: 800; font-size: clamp(2.4rem, 4.4vw, 3.2rem); color: #7ee2a8; line-height: 1; }
+  .tier-per { color: var(--muted); font-size: 0.95rem; }
+  .tier-hook { color: var(--text); font-weight: 600; margin-top: 16px; line-height: 1.55; }
+  .tier-list { list-style: none; margin-top: 20px; display: grid; gap: 11px; }
+  .tier-list li { color: var(--muted); font-size: 0.94rem; line-height: 1.55; padding-left: 26px; position: relative; }
+  .tier-list li::before {
+    content: "✓"; position: absolute; left: 0; top: 0;
+    color: var(--green); font-weight: 800; font-size: 0.9rem;
+  }
+  .tier-foot {
+    margin-top: auto; padding-top: 22px; color: var(--muted);
+    font-size: 0.85rem; line-height: 1.6; border-top: 1px solid var(--line);
+  }
+  .tier-foot b { color: var(--text); }
+
+  .why-pay { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+  .why-pay div {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+    border-radius: 16px; padding: 22px 24px; color: var(--muted);
+    font-size: 0.92rem; line-height: 1.65;
+  }
+  .why-pay b { color: var(--text); display: block; margin-bottom: 6px; font-size: 1rem; }
+
+  @media (max-width: 900px) {
+    .price-grid, .why-pay { grid-template-columns: 1fr; }
+  }
 
   /* footer */
   footer {
@@ -624,24 +679,102 @@
     <div class="sec-eyebrow">Pricing</div>
     <h2 class="sec-title">Free to scan. Forever.</h2>
     <p class="sec-sub">
-      Scanning, scoring, and allergen protection are free for everyone, always.
-      Nutovia+ adds the family layer and AI research - and the earlier you join,
-      the better your deal.
+      Scanning, scoring and allergen protection are free for everyone, always.
+      Nutovia+ adds the family layer, your full history and AI research - and it
+      is what pays for the research that keeps the free tier free.
     </p>
   </div>
-  <div class="price-card reveal">
-    <div class="zero">$0</div>
-    <p style="margin-top:6px;">
-      <b style="color:#7ee2a8;">Founding members - our first 100 households - keep
-      every feature free forever.</b>
-    </p>
-    <p>
-      After that: the next 1,000 members lock in Nutovia+ at
-      <b>$14.99/year</b> (or $1.99/month) for as long as they stay subscribed;
-      the standard price is <b>$19.99/year</b> (or $2.99/month). Family profiles,
-      healthier alternatives with AI research, AI product search, history tools -
-      less than $2 a month for the whole family. No ads, no data sales, ever.
-    </p>
+
+  <div class="founding-strip reveal">
+    <span class="fs-mark">🌱</span>
+    <span>
+      <b>Founding members - our first 100 households - keep every feature free, forever.</b>
+      No renewal, no catch. Someone has to go first.
+    </span>
+  </div>
+
+  <div class="price-grid">
+    <div class="tier reveal">
+      <span class="tier-badge quiet">Always free</span>
+      <div class="tier-name">Free</div>
+      <div class="tier-cost">
+        <span class="tier-now">$0</span>
+        <span class="tier-per">forever</span>
+      </div>
+      <p class="tier-hook">No card. No trial. No countdown.</p>
+      <ul class="tier-list">
+        <li>Unlimited barcode scanning</li>
+        <li>Photograph any label, in any language</li>
+        <li>An honest 0-100 score with every reason spelled out</li>
+        <li>Allergen and diet warnings</li>
+        <li>Search 630,000+ scored products</li>
+        <li>Your last 7 days of scans</li>
+      </ul>
+      <div class="tier-foot">
+        The scanning stays free whatever happens to the rest of it.
+      </div>
+    </div>
+
+    <div class="tier featured reveal">
+      <span class="tier-badge">Founding price · first 1,000</span>
+      <div class="tier-name">Nutovia+</div>
+      <div class="tier-cost">
+        <span class="tier-was">$20</span>
+        <span class="tier-now">$12</span>
+        <span class="tier-per">/ year</span>
+      </div>
+      <p class="tier-hook">A dollar a month for the whole family.</p>
+      <ul class="tier-list">
+        <li>Everything in Free</li>
+        <li>Up to 7 family profiles, each scored personally</li>
+        <li>Your complete history - nothing is ever deleted</li>
+        <li>My Stores: healthier swaps at the shops you actually use</li>
+        <li>AI Assist for products no database has heard of</li>
+        <li>Locked at $12 for as long as you stay subscribed</li>
+      </ul>
+      <div class="tier-foot">
+        Or <b>$39 for three years</b>. Once the first 1,000 are claimed the
+        price is $20/year.
+      </div>
+    </div>
+
+    <div class="tier reveal">
+      <span class="tier-badge">500 only</span>
+      <div class="tier-name">Founding Lifetime</div>
+      <div class="tier-cost">
+        <span class="tier-now">$89</span>
+        <span class="tier-per">once</span>
+      </div>
+      <p class="tier-hook">Pay once. Done.</p>
+      <ul class="tier-list">
+        <li>Everything in Nutovia+, for as long as Nutovia runs</li>
+        <li>No renewals, no price rises, ever</li>
+        <li>Founding supporter mark in the app</li>
+        <li>You are funding year one, directly</li>
+      </ul>
+      <div class="tier-foot">
+        <b>500 memberships.</b> When they are gone, they are gone - this offer
+        does not come back.
+      </div>
+    </div>
+  </div>
+
+  <div class="why-pay reveal">
+    <div>
+      <b>Nobody paid us to say it</b>
+      No ads. No data sales. No shelf space for sale. The only people Nutovia
+      answers to are the ones paying for it.
+    </div>
+    <div>
+      <b>Your subscription feeds everyone</b>
+      It funds the research that fills in missing labels - and those corrections
+      go to every user, free ones included.
+    </div>
+    <div>
+      <b>Independent, and staying that way</b>
+      No investors, no advertisers, no food brand on the cap table. If it has
+      saved you one bad purchase, it has paid for itself.
+    </div>
   </div>
 </section>
 
