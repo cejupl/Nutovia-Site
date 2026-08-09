@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How the Nutovia score works</title>
+<meta name="description" content="How Nutovia turns a nutrition label into a 0-100 score: the Nutri-Score 2023 base, the processing and additive adjustments it leaves out, the ten measures behind every product, and what we can still get wrong." />
+<meta property="og:title" content="How the Nutovia score works" />
+<meta property="og:description" content="Two products, almost identical sugar, scores of 11 and 88. Here is exactly why - and what we can still get wrong." />
+<meta property="og:image" content="https://nutovia.app/logo.png" />
+<meta property="og:url" content="https://nutovia.app/scoring.html" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+
+  :root {
+    --bg: #071410;
+    --bg-2: #0b2818;
+    --panel: rgba(255, 255, 255, 0.045);
+    --panel-strong: rgba(255, 255, 255, 0.08);
+    --line: rgba(255, 255, 255, 0.09);
+    --text: #eef7f1;
+    --muted: #9db4a7;
+    --green: #2ecc71;
+    --green-deep: #1b9e4b;
+    --amber: #f2a31b;
+    --red: #e6541f;
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(-28px, 26px, 0) scale(1.05); }
+    66% { transform: translate3d(22px, -20px, 0) scale(0.97); }
+  }
+  .grain {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px clamp(20px, 5vw, 56px);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: rgba(7, 20, 16, 0.55); border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: "Sora"; font-weight: 700; font-size: 1.15rem; }
+  .brand img { width: 34px; height: 34px; }
+  .nav-links { display: flex; gap: 26px; font-size: 0.92rem; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    color: #06130c; font-weight: 600; font-size: 0.9rem;
+    padding: 9px 18px; border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(46, 204, 113, 0.35);
+  }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--green); background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    padding: 7px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    color: #06130c; font-weight: 700; padding: 15px 26px; border-radius: 14px;
+    box-shadow: 0 10px 34px rgba(46, 204, 113, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 44px rgba(46, 204, 113, 0.45); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--text); font-weight: 600; padding: 15px 22px;
+    border-radius: 14px; border: 1px solid var(--line); background: var(--panel);
+    transition: background 0.2s ease;
+  }
+  .btn-ghost:hover { background: var(--panel-strong); }
+  @keyframes phoneFloat {
+    0%, 100% { translate: 0 0; } 50% { translate: 0 -16px; }
+  }
+  @keyframes beam {
+    0% { top: -40%; opacity: 0; } 12% { opacity: 1; }
+    52% { top: 105%; opacity: 1; } 60%, 100% { top: 105%; opacity: 0; }
+  }
+  @keyframes ringP { to { stroke-dashoffset: 59; } }
+  @keyframes ringF { to { stroke-dashoffset: 109; } }
+  @keyframes rIn { to { opacity: 1; transform: none; } }
+  @keyframes chipFloat { 0%,100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 108px; }
+    .hero p.sub { margin-inline: auto; }
+    .cta-row, .hero-points { justify-content: center; }
+    .scene { margin-top: 26px; }
+    .fc2 { left: -2%; } .fc3 { right: -2%; }
+  }
+  section { max-width: 1160px; margin: 0 auto; padding: clamp(64px, 9vw, 120px) clamp(20px, 5vw, 48px); }
+  .sec-eyebrow { color: var(--green); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+  .sec-title { font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 800; line-height: 1.15; max-width: 34rem; }
+  .sec-sub { color: var(--muted); margin-top: 16px; max-width: 40rem; line-height: 1.65; }
+  .center { text-align: center; }
+  .center .sec-title, .center .sec-sub { margin-inline: auto; }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+  @keyframes spinCube { to { transform: rotateY(360deg) rotateX(360deg); } }
+  @media (max-width: 860px) { .trail-panel { grid-template-columns: 1fr; } }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+  .cell {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 26px; transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .cell:hover { transform: translateY(-5px); background: var(--panel-strong); }
+  .cell .emo { font-size: 1.6rem; }
+  .cell h3 { font-size: 1.02rem; margin: 14px 0 8px; }
+  .cell p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+  .cell.wide { grid-column: span 2; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .cell.wide { grid-column: span 1; } }
+  @keyframes langFloat {
+    0%, 100% { transform: translateY(0) rotateX(0); }
+    50% { transform: translateY(-9px) rotateX(6deg); }
+  }
+  @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+  @media (max-width: 720px) { .swap-panel { grid-template-columns: 1fr; } .swap-arrow { transform: rotate(90deg); text-align: center; } }
+
+  .axis { padding: 15px 0; border-bottom: 1px solid var(--line); }
+  .axis:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .axis-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .axis-name { font-weight: 600; font-size: 0.94rem; }
+  .axis-val { color: var(--muted); font-size: 0.82rem; text-align: right; }
+  .axis-track {
+    position: relative; height: 7px; border-radius: 999px; margin-top: 11px;
+    background: linear-gradient(90deg, #2ecc71, #a8d84a 36%, #f2a31b 66%, #e6541f);
+  }
+  .axis-track.rev { background: linear-gradient(90deg, #e6541f, #f2a31b 34%, #a8d84a 64%, #2ecc71); }
+  .axis-pin {
+    position: absolute; top: 50%; width: 13px; height: 13px; border-radius: 50%;
+    background: #fff; border: 3px solid #08170f; transform: translate(-50%, -50%);
+    box-shadow: 0 2px 9px rgba(0,0,0,0.55);
+  }
+  .axis-ends { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  @media (max-width: 900px) { .score-why { grid-template-columns: 1fr; } }
+
+  @media (max-width: 900px) {
+    .price-grid, .why-pay { grid-template-columns: 1fr; }
+  }
+  footer {
+    border-top: 1px solid var(--line); padding: 44px clamp(20px, 5vw, 56px);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px;
+    color: var(--muted); font-size: 0.88rem;
+  }
+  .foot-links { display: flex; gap: 22px; }
+  .foot-links a:hover { color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .ring-val.rp { stroke-dashoffset: 59; }
+    .ring-val.rf { stroke-dashoffset: 109; }
+    .reason { opacity: 1; transform: none; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* scoring page */
+  .lede { font-size: 1.12rem; line-height: 1.75; color: var(--muted); max-width: 42rem; }
+  .lede b { color: var(--text); }
+  .band-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 34px; }
+  .band {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 16px; text-align: center;
+  }
+  .band .n { font-family: "Sora"; font-weight: 800; font-size: 1.05rem; }
+  .band .w { display: block; margin-top: 6px; color: var(--muted); font-size: 0.8rem; }
+
+  .versus { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 40px; }
+  .vcard {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 22px; padding: clamp(22px, 3vw, 32px);
+  }
+  .vcard.good { border-color: rgba(46,204,113,0.4); background: linear-gradient(165deg, rgba(46,204,113,0.11), rgba(46,204,113,0.02)); }
+  .vcard.bad { border-color: rgba(230,84,31,0.35); background: linear-gradient(165deg, rgba(230,84,31,0.10), rgba(230,84,31,0.02)); }
+  .vhead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .vname { font-family: "Sora"; font-weight: 700; font-size: 1.02rem; }
+  .vkind { color: var(--muted); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .vscore { font-family: "Sora"; font-weight: 800; font-size: clamp(2.6rem, 5vw, 3.4rem); line-height: 1.05; margin-top: 10px; }
+  .vscore small { font-size: 0.9rem; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+  .vsub { color: var(--muted); font-size: 0.86rem; margin-top: 4px; }
+  .vfacts { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+  .vfacts li { display: flex; justify-content: space-between; gap: 14px; font-size: 0.9rem; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 9px; }
+  .vfacts li:last-child { border-bottom: 0; }
+  .vfacts b { color: var(--text); font-weight: 600; text-align: right; }
+
+  .pull {
+    margin-top: 34px; padding: 26px 30px; border-radius: 18px;
+    background: rgba(255,255,255,0.035); border-left: 3px solid var(--green);
+    font-size: 1.04rem; line-height: 1.7;
+  }
+  .pull b { color: #7ee2a8; }
+
+  .steps-num { counter-reset: st; display: grid; gap: 18px; margin-top: 38px; }
+  .stepline {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px 24px; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+  }
+  .stepline .idx {
+    font-family: "Sora"; font-weight: 800; color: var(--green);
+    font-size: 0.82rem; letter-spacing: 0.1em; padding-top: 2px;
+  }
+  .stepline h3 { font-size: 1rem; margin-bottom: 7px; }
+  .stepline p { color: var(--muted); font-size: 0.93rem; line-height: 1.65; }
+
+  .measure-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 34px; margin-top: 34px; }
+  .measure { border-bottom: 1px solid var(--line); padding-bottom: 13px; }
+  .measure b { font-size: 0.95rem; }
+  .measure span { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 4px; line-height: 1.55; }
+
+  .limits { display: grid; gap: 14px; margin-top: 34px; }
+  .limit {
+    background: rgba(242,163,27,0.07); border: 1px solid rgba(242,163,27,0.28);
+    border-radius: 14px; padding: 20px 22px;
+  }
+  .limit b { display: block; margin-bottom: 6px; font-size: 0.97rem; }
+  .limit span { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
+
+  .score-why {
+    margin-top: 48px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 24px; padding: clamp(26px, 4vw, 44px);
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 4vw, 48px);
+    align-items: start; text-align: left;
+  }
+  .sw-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 6px; }
+  .sw-head b { font-size: 1.02rem; }
+  .sw-head .sw-score { font-family: "Sora"; font-weight: 800; font-size: 1.5rem; color: #7ee2a8; }
+  .sw-cap { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.02em; }
+
+  .fam-panel { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .fam-title { font-size: 0.98rem; font-weight: 700; }
+  .fam-sub { color: var(--muted); font-size: 0.82rem; margin-top: 5px; line-height: 1.5; }
+  .fam-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .fam-row:last-of-type { border-bottom: 0; }
+  .fam-who { font-weight: 600; font-size: 0.92rem; }
+  .fam-why { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 3px; line-height: 1.45; }
+  .fam-delta { font-family: "Sora"; font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+  .fam-delta.down { color: #e6541f; }
+  .fam-delta.up { color: #2ecc71; }
+  .fam-delta.stop { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #e6541f; }
+  .fam-foot { color: var(--muted); font-size: 0.78rem; line-height: 1.6; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 860px) {
+    .versus, .measure-grid { grid-template-columns: 1fr; }
+    .band-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav>
+  <a class="brand" href="index.html"><img src="logo.png" alt="Nutovia logo" /> Nutovia</a>
+  <div class="nav-links">
+    <a href="index.html#how">How it works</a>
+    <a href="index.html#why">Scoring</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+  <a class="nav-cta" href="index.html#get">Get the app</a>
+</nav>
+
+<section id="top">
+  <div class="reveal">
+    <div class="sec-eyebrow">Methodology</div>
+    <h2 class="sec-title" style="max-width:30rem;">How the Nutovia score works.</h2>
+    <p class="lede" style="margin-top:18px;">
+      Every product gets one number between 0 and 100, built from its label and nothing
+      else. <b>No brand pays to change it.</b> This page explains exactly how that number
+      is made, shows two real examples end to end, and sets out the things it can still
+      get wrong.
+    </p>
+    <div class="band-row">
+      <div class="band"><span class="n" style="color:#038141">70 - 100</span><span class="w">Excellent</span></div>
+      <div class="band"><span class="n" style="color:#85BB2F">50 - 69</span><span class="w">Good</span></div>
+      <div class="band"><span class="n" style="color:#EE8100">30 - 49</span><span class="w">Mediocre</span></div>
+      <div class="band"><span class="n" style="color:#E63E11">0 - 29</span><span class="w">Poor</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Start here</div>
+    <h2 class="sec-title">Two products. Almost identical sugar. Scores of 11 and 88.</h2>
+    <p class="sec-sub">
+      This is the whole method in one comparison. Both carry about 37g of sugar per 100g.
+      One scores 11, the other 88 - and every point of that gap is explainable.
+    </p>
+  </div>
+
+  <div class="versus reveal">
+    <div class="vcard bad">
+      <div class="vhead">
+        <span class="vname">Frosted flakes cereal</span>
+        <span class="vkind">Illustrative</span>
+      </div>
+      <div class="vscore" style="color:#E63E11">11<small> / 100</small></div>
+      <div class="vsub">Nutri-Score E</div>
+      <ul class="vfacts">
+        <li><span>Sugar</span><b>37g</b></li>
+        <li><span>Of which added</span><b>36g</b></li>
+        <li><span>Fibre</span><b>1.8g</b></li>
+        <li><span>Salt</span><b>1.1g</b></li>
+        <li><span>Processing</span><b>NOVA 4, ultra-processed</b></li>
+        <li><span>Additives</span><b>Colour, antioxidant</b></li>
+      </ul>
+    </div>
+
+    <div class="vcard good">
+      <div class="vhead">
+        <span class="vname">Banana Bread Bar</span>
+        <span class="vkind">Real product</span>
+      </div>
+      <div class="vscore" style="color:#038141">88<small> / 100</small></div>
+      <div class="vsub">Nutri-Score C</div>
+      <ul class="vfacts">
+        <li><span>Sugar</span><b>37.8g</b></li>
+        <li><span>Of which added</span><b>none</b></li>
+        <li><span>Fibre</span><b>8.9g</b></li>
+        <li><span>Salt</span><b>0g</b></li>
+        <li><span>Processing</span><b>NOVA 1, whole food</b></li>
+        <li><span>Additives</span><b>None</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pull reveal">
+    A model that only counted sugar would score these the same. A model that only counted
+    processing would ignore the sugar entirely. <b>Nutovia counts both, shows you both, and
+    lets you decide</b> - the bar is still 37.8g of sugar, and its scorecard says so in
+    plain words.
+  </div>
+
+  <p class="sec-sub reveal" style="margin-top:26px;">
+    Note the Nutri-Score column. The bar earns a C there and an 88 here: Nutri-Score
+    penalises its sugar and fat without crediting that it is three whole ingredients. That
+    gap is not a disagreement with the regulator - it is precisely what Nutovia adds.
+    Both numbers appear on every product, so you can see when they part company.
+    <em>The cereal is a representative label rather than a named brand; its score is not
+    invented, it is what the engine returns for those values.</em>
+  </p>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">The recipe</div>
+    <h2 class="sec-title">Four steps, in this order.</h2>
+  </div>
+  <div class="steps-num">
+    <div class="stepline reveal">
+      <span class="idx">01</span>
+      <div>
+        <h3>Start from the official model</h3>
+        <p>The base is Nutri-Score 2023, the algorithm used by European food agencies. We
+        did not invent it, we do not tune it, and we show its grade on every product. It
+        weighs energy, sugar, saturated fat and salt against fibre, protein and
+        fruit-and-vegetable content.</p>
+      </div>
+    </div>
+    <div class="stepline reveal">
+      <span class="idx">02</span>
+      <div>
+        <h3>Adjust for processing</h3>
+        <p>Nutri-Score is blind to how a food was made. Nutovia is not. A NOVA group 4
+        ultra-processed product carries a penalty a whole food does not, which is most of
+        the 77-point gap in the comparison above.</p>
+      </div>
+    </div>
+    <div class="stepline reveal">
+      <span class="idx">03</span>
+      <div>
+        <h3>Adjust for additives</h3>
+        <p>Cosmetic additives - colours, sweeteners, texture agents present to make a
+        product look or taste like something it is not - reduce the score. Additives that
+        do a genuine job of preservation or fortification do not.</p>
+      </div>
+    </div>
+    <div class="stepline reveal">
+      <span class="idx">04</span>
+      <div>
+        <h3>Apply a small number of hard rules</h3>
+        <p>A few cases should never be decided by arithmetic alone. Industrial trans fat
+        caps a score however good the rest of the label is. Plain water and plain tea are
+        not penalised for having no nutrients. Every one of these rules is fixed,
+        published, and applies to every product equally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">What we measure</div>
+    <h2 class="sec-title">Ten measures, each on a scale you can see.</h2>
+    <p class="sec-sub">
+      Every product page shows where it actually lands on each one, not just whether it
+      passed. The thresholds are borrowed from published standards rather than chosen by
+      us: UK FSA traffic lights for sugar, salt and fat; EU nutrition-claim thresholds for
+      fibre and protein; the NOVA classification for processing.
+    </p>
+  </div>
+  <div class="measure-grid reveal">
+    <div class="measure"><b>Sugar</b><span>Total sugar per 100g, on the FSA scale.</span></div>
+    <div class="measure"><b>Added sugar</b><span>Sugar put in, separated from sugar that came with the fruit.</span></div>
+    <div class="measure"><b>Saturated fat</b><span>The fat fraction that matters most for heart health.</span></div>
+    <div class="measure"><b>Salt</b><span>Sodium converted to salt, per 100g.</span></div>
+    <div class="measure"><b>Fibre</b><span>Credited, not just tolerated - more is better.</span></div>
+    <div class="measure"><b>Protein</b><span>Credited against the EU "source of protein" threshold.</span></div>
+    <div class="measure"><b>Calories</b><span>Energy density, judged per realistic serving.</span></div>
+    <div class="measure"><b>Processing</b><span>NOVA group, from whole food to ultra-processed.</span></div>
+    <div class="measure"><b>Additives</b><span>Cosmetic additives counted; functional ones not.</span></div>
+    <div class="measure"><b>Whole-food content</b><span>Fruit, vegetable, legume and nut content.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Your score</div>
+    <h2 class="sec-title">The product score is the same for everyone. Yours is not.</h2>
+    <p class="sec-sub">
+      The 0-100 above is a property of the food. Your score adds who is eating it. Same
+      bar, one household:
+    </p>
+  </div>
+  <div class="score-why reveal" style="grid-template-columns:1fr;">
+    <div class="fam-panel" style="background:transparent;border:0;padding:0;">
+      <div class="fam-row">
+        <span class="fam-who">Ada<span class="fam-why">Watching sugar - 37.8g is very high, even from fruit</span></span>
+        <span class="fam-delta down">-18</span>
+      </div>
+      <div class="fam-row">
+        <span class="fam-who">Sam<span class="fam-why">Building muscle - 11.1g protein is a solid source</span></span>
+        <span class="fam-delta up">+8</span>
+      </div>
+      <div class="fam-row">
+        <span class="fam-who">Leo<span class="fam-why">Tree-nut allergy - contains almonds</span></span>
+        <span class="fam-delta stop">Avoid</span>
+      </div>
+      <p class="fam-foot">
+        Goals move a score by a bounded amount, so your profile adjusts a number without
+        replacing it - the food's own nutrition always carries most of the weight. An
+        allergen is different in kind: it is a hard stop, not a deduction, and no amount
+        of good nutrition overrides it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Provenance</div>
+    <h2 class="sec-title">You can always see where a number came from.</h2>
+    <p class="sec-sub">
+      Every scan replays its own search: which database answered, what was missing, and
+      whether anything was inferred. Four sources, in order of confidence - the Nutovia
+      catalog, Open Food Facts, USDA FoodData Central, and last of all AI web research,
+      which is labelled as such and held to a lower level of trust. A product scored from
+      thin data is never presented as though it were scored from a complete label.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Validation</div>
+    <h2 class="sec-title">How we know the number holds up.</h2>
+    <p class="sec-sub">
+      The scoring engine is frozen against a locked set of 1,999 products: any change that
+      moves a single one of those scores fails the build before it can ship. The catalog
+      is scored in full - all 630,000 products - so the distribution can be inspected
+      rather than assumed, and the model is reviewed against qualified dietitian judgement
+      before a version is finalised.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Honesty</div>
+    <h2 class="sec-title">What the score can still get wrong.</h2>
+    <p class="sec-sub">
+      Every scoring system has failure modes. Most do not publish them. Here are ours.
+    </p>
+  </div>
+  <div class="limits reveal">
+    <div class="limit">
+      <b>A label can be wrong before we ever see it</b>
+      <span>Much of the world's food data is crowdsourced, and a mistyped sugar figure
+      produces a confident, wrong score. Every product carries a report button, and
+      reports are checked.</span>
+    </div>
+    <div class="limit">
+      <b>Per 100g is not per portion</b>
+      <span>Scores are computed per 100g so products can be compared honestly. That is the
+      right basis for comparison and the wrong basis for a meal - a small amount of a
+      low-scoring food may matter less than a large amount of a high-scoring one.</span>
+    </div>
+    <div class="limit">
+      <b>Two decimal places of confidence we do not have</b>
+      <span>A 0-100 scale implies a precision nutrition science does not offer. Treat a
+      gap of two points as noise, and a gap of twenty as real.</span>
+    </div>
+    <div class="limit">
+      <b>Categories at the edges</b>
+      <span>Foods that do not sit neatly in a category - fermented products, traditional
+      preparations, foods eaten in very small quantities - are the hardest to place, and
+      the most likely to need adjustment as the model improves.</span>
+    </div>
+    <div class="limit">
+      <b>It is not medical advice</b>
+      <span>Nutovia is general wellness guidance built on public nutrition data. It does
+      not know your bloodwork, your medication or your doctor's advice, and it is not a
+      substitute for any of them.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="sec-eyebrow">Stability</div>
+    <h2 class="sec-title">The number will not move under you.</h2>
+    <p class="sec-sub">
+      Scores change only in versioned, announced batches - never quietly and never
+      continuously. A product you scanned last month scores the same today unless its
+      label changed or its data improved, and when the model itself changes we say so
+      before it happens.
+    </p>
+    <div class="cta-row" style="margin-top:30px;">
+      <a class="btn-primary" href="index.html#get">&#63743; Get Nutovia</a>
+      <a class="btn-ghost" href="index.html#pricing">See pricing</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand" style="font-size:1rem;"><img src="logo.png" alt="" style="width:26px;height:26px;" /> Nutovia</div>
+  <div class="foot-links">
+    <a href="index.html">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="mailto:support@nutovia.app">Contact</a>
+  </div>
+  <div>&copy; 2026 Nutovia. Wellness guidance, not medical advice - always check the label.</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('in')),
+    { threshold: 0.12 },
+  );
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
