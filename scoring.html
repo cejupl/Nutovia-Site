@@ -110,7 +110,13 @@
     .scene { margin-top: 26px; }
     .fc2 { left: -2%; } .fc3 { right: -2%; }
   }
-  section { max-width: 1160px; margin: 0 auto; padding: clamp(64px, 9vw, 120px) clamp(20px, 5vw, 48px); }
+  /* Tighter vertically than index.html, deliberately. There the sections
+     are big visual blocks - card grids, the phone scene - and the wide
+     rhythm reads as confidence. Here most sections are a heading and one
+     paragraph, so the same padding reads as gaps rather than breathing
+     room. Horizontal padding is unchanged so the column still lines up
+     with the rest of the site. */
+  section { max-width: 1160px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) clamp(20px, 5vw, 48px); }
   .sec-eyebrow { color: var(--green); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
   .sec-title { font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 800; line-height: 1.15; max-width: 34rem; }
   .sec-sub { color: var(--muted); margin-top: 16px; max-width: 40rem; line-height: 1.65; }
@@ -239,6 +245,19 @@
   .limit b { display: block; margin-bottom: 6px; font-size: 0.97rem; }
   .limit span { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
 
+  /* The answer to the amber list above, so it is green rather than amber:
+     the limits are what can go wrong, this is the handle for fixing it. */
+  .fixit {
+    margin-top: 18px; display: flex; gap: 18px; align-items: flex-start;
+    background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.3);
+    border-radius: 16px; padding: 22px 24px;
+  }
+  .fixit-flag { font-size: 1.5rem; line-height: 1.1; color: var(--green); }
+  .fixit b { display: block; margin-bottom: 6px; font-size: 1.02rem; }
+  .fixit span { color: var(--muted); font-size: 0.93rem; line-height: 1.65; }
+  .fixit em { color: var(--text); font-style: normal; font-weight: 600; }
+  @media (max-width: 600px) { .fixit { gap: 14px; padding: 20px; } }
+
   .score-why {
     margin-top: 48px; background: var(--panel); border: 1px solid var(--line);
     border-radius: 24px; padding: clamp(26px, 4vw, 44px);
@@ -358,8 +377,8 @@
   <p class="sec-sub reveal" style="margin-top:26px;">
     Note the Nutri-Score column. The bar earns a C there and an 88 here: Nutri-Score
     penalises its sugar and fat without crediting that it is three whole ingredients. That
-    gap is not a disagreement with the regulator - it is precisely what Nutovia adds.
-    Both numbers appear on every product, so you can see when they part company.
+    gap is not a disagreement with the regulator - but it is precisely what Nutovia
+    fills. Both scores appear on every product - you can see when they differ and why.
     <em>The cereal is a representative label rather than a named brand; its score is not
     invented, it is what the engine returns for those values.</em>
   </p>
@@ -492,8 +511,7 @@
       The scoring engine is frozen against a locked set of 1,999 products: any change that
       moves a single one of those scores fails the build before it can ship. The catalog
       is scored in full - all 630,000 products - so the distribution can be inspected
-      rather than assumed, and the model is reviewed against qualified dietitian judgement
-      before a version is finalised.
+      rather than assumed.
     </p>
   </div>
 </section>
@@ -510,8 +528,8 @@
     <div class="limit">
       <b>A label can be wrong before we ever see it</b>
       <span>Much of the world's food data is crowdsourced, and a mistyped sugar figure
-      produces a confident, wrong score. Every product carries a report button, and
-      reports are checked.</span>
+      produces a confident, wrong score. This is the failure mode you can fix for us -
+      see below.</span>
     </div>
     <div class="limit">
       <b>Per 100g is not per portion</b>
@@ -535,6 +553,17 @@
       <span>Nutovia is general wellness guidance built on public nutrition data. It does
       not know your bloodwork, your medication or your doctor's advice, and it is not a
       substitute for any of them.</span>
+    </div>
+  </div>
+
+  <div class="fixit reveal">
+    <div class="fixit-flag" aria-hidden="true">&#9873;</div>
+    <div>
+      <b>Found something wrong? Tell us - it takes seconds.</b>
+      <span>Every product in the app has a <em>Report a data issue</em> link. Say what
+      looks wrong - the nutrition, the ingredients, or the product itself - and a person
+      reviews it. Every correction improves that product for everyone who scans it next.
+      It is the single most useful thing you can do for the accuracy of the score.</span>
     </div>
   </div>
 </section>
