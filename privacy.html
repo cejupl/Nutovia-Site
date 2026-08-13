@@ -14,68 +14,166 @@
     @media (prefers-color-scheme: dark) {
       body { color: #e6ece8; background: #0e1512; }
       a { color: #6fd39a; }
+      table { border-color: #2a3a31; }
+      th, td { border-color: #2a3a31; }
     }
     h1 { font-size: 1.7rem; margin-bottom: 0.2rem; }
     h2 { font-size: 1.15rem; margin-top: 2rem; }
     .updated { color: #6b7a71; font-size: 0.9rem; }
     a { color: #1b9e4b; }
     li { margin-bottom: 6px; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+    th, td { border: 1px solid #d7e2da; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { font-size: 0.85rem; }
+    .note { color: #6b7a71; font-size: 0.9rem; }
   </style>
 </head>
 <body>
   <h1>Nutovia Privacy Policy</h1>
-  <p class="updated">Last updated: July 19, 2026</p>
+  <p class="updated">Version 2 - Last updated: August 12, 2026</p>
 
   <p>
-    Nutovia is a free food-scanner app that helps families understand what is in
-    packaged food. This policy explains what data the app handles, why, and the
-    choices you have. The short version: your data belongs to your household,
-    we show no ads, and we never sell data.
+    Nutovia is a food-scanner app that helps families understand what is in
+    packaged food. This policy explains what data we handle, why, where it
+    lives, and the choices you have. The short version: your data belongs to
+    your household, we show no ads, we never sell data, and health information
+    is collected only for scoring products for you - with your explicit
+    permission.
+  </p>
+
+  <h2>Who we are</h2>
+  <p>
+    Nutovia is operated by <strong>Cenovya Labs LLC</strong>, a company
+    registered in the United States, which is the data controller for the
+    personal data described here. For anything in this policy:
+    <a href="mailto:privacy@nutovia.app">privacy@nutovia.app</a>.
   </p>
 
   <h2>Information we collect</h2>
   <ul>
-    <li><strong>Account:</strong> your email address (and name, if your sign-in provider shares it) when you sign in with Apple, Google, Facebook, or email.</li>
-    <li><strong>Family profiles:</strong> the names or nicknames, dietary preferences, health goals, and allergen restrictions you enter for members of your household. This can include sensitive information (for example, allergies); it is used only to personalize scores and suggestions and is visible only to your household.</li>
-    <li><strong>Scan history:</strong> the products you scan, their scores, and when you scanned them - stored so you can revisit them in the History tab.</li>
+    <li><strong>Account:</strong> your email address (and name, if your sign-in provider shares it) when you sign in with Apple, Google, or email.</li>
+    <li><strong>Family profiles:</strong> the names or nicknames, food preferences, goals, and allergen restrictions you enter for members of your household - collected only after you give the permission described below, used only to score products for your family, and visible only to your household.</li>
+    <li><strong>Your permission record:</strong> when you agree to the health-data permission in the app, we store when you agreed and which version of the wording you saw, so your consent is provable and withdrawable.</li>
+    <li><strong>Scan history:</strong> the products you scan, their scores, favourites, and when you scanned them - so you can revisit them in History.</li>
     <li><strong>Store selections:</strong> the store chains you choose, used to rank alternatives.</li>
+    <li><strong>Usage statistics:</strong> anonymous event counts and timings (for example, "a scan succeeded", "onboarding step completed") with your household id, the app version, and platform. These never contain product names, search terms, allergens, diets, goals, or any free text - the app is built so they cannot. Kept for 90 days, then deleted.</li>
+    <li><strong>Crash reports:</strong> if the app crashes, a technical report is sent to our error-reporting service. It is stripped before sending: no email address, no IP address, no request contents - your account appears only as a random identifier so we can tell how many people a bug affects.</li>
   </ul>
+
+  <h2>Health information and your permission</h2>
+  <p>
+    Allergies and some food preferences are health information. We ask for your
+    explicit permission during setup, before any of it is collected, and we do
+    not collect it without that permission. It is used for exactly one thing:
+    scoring products for your household. It is never sold, never shared with
+    brands, and never used for advertising.
+  </p>
+  <p>
+    You can withdraw this permission at any time by deleting your account
+    (Settings &rarr; Account). There is no state in which Nutovia holds health
+    information it no longer has permission for - withdrawing and deleting are
+    the same act, and the app tells you so before anything happens.
+  </p>
 
   <h2>Camera, photos, and location</h2>
   <ul>
     <li><strong>Camera</strong> is used to read barcodes and photograph nutrition labels. Label photos are processed on your device; the extracted <em>text</em> may be sent to our servers for interpretation. Photos themselves are not uploaded or stored by Nutovia.</li>
-    <li><strong>Location</strong> is used only when you tap "Detect the store I'm in", only while the app is in use, and only to match a nearby store name. Your location is not stored and is never linked to your identity.</li>
+    <li><strong>Location</strong> is used only when you tap "Detect the store I'm in", only while the app is in use, and only to find a nearby store name. To do that, your coordinates are sent from your device to OpenStreetMap's Overpass service (a community map database in Germany) - along with your IP address, as with any direct request, but never your identity, profiles, or history. Nutovia does not store your location.</li>
   </ul>
 
   <h2>How we use AI</h2>
   <p>
-    When a product or alternative is not in our databases, Nutovia may send the
-    product's barcode, name, category, label text, and - for personalized
-    suggestions - the dietary preferences of the active profile to an AI service
-    (Anthropic's Claude) to research publicly available nutrition information.
-    No names, email addresses, or account identifiers are included in these
-    requests. AI-sourced results are clearly marked in the app.
+    When a product is missing from our databases, Nutovia may send the
+    product's barcode, name, category, and label text to Anthropic (the AI
+    service behind these features) to research publicly available nutrition
+    information. When you ask for personalized alternatives, the dietary
+    preferences, allergens, and goals of the active profile are included so
+    suggestions fit that person - <strong>without</strong> any name, email
+    address, or account identifier. Under Anthropic's commercial terms, these
+    requests are not used to train their models. AI-sourced results are
+    clearly marked in the app and are
+    never trusted for allergen verification - only a product's real
+    ingredients list can clear an allergen.
   </p>
 
   <h2>Where your data lives</h2>
   <p>
-    Nutovia's backend runs on Supabase (database, authentication, and secure
-    functions). Access controls ensure each household can only read and write
-    its own data. Product information you help identify (for example, a
+    Your household's data is stored in the <strong>European Union (London
+    region)</strong> on Supabase, with access controls that ensure each
+    household can only read and write its own data. Crash reports are stored
+    in the EU as well. Product information you help identify (for example, a
     confirmed label) may be added, without any personal information, to the
     shared product catalog that benefits all users.
+  </p>
+  <p>
+    A few lookups happen directly from your phone rather than through our
+    servers: barcode queries to <strong>Open Food Facts</strong> (a non-profit
+    product database in France), store detection via <strong>OpenStreetMap's
+    Overpass service</strong>, and store-name search via
+    <strong>Photon</strong>. Each of these sees your IP address and the query
+    itself (a barcode, coordinates, or a store name you typed) - but never
+    your identity, profiles, or history.
+  </p>
+  <p class="note">
+    Cenovya Labs LLC is a United States company. Like any US company, it can
+    be subject to lawful requests from US authorities regardless of where data
+    is hosted. We review every request we receive and disclose only what we
+    are legally required to.
+  </p>
+
+  <h2>Who processes data for us</h2>
+  <p>
+    We use a small number of service providers, each bound by a data
+    processing agreement and each receiving only what its job requires:
+  </p>
+  <table>
+    <tr><th>Provider</th><th>What they do</th><th>What they receive</th></tr>
+    <tr><td>Supabase</td><td>Database, sign-in, secure functions (EU, London)</td><td>The household data described above</td></tr>
+    <tr><td>Anthropic</td><td>AI product research and suggestions</td><td>Product details; for suggestions, unnamed dietary preferences</td></tr>
+    <tr><td>Sentry</td><td>Crash reporting (EU-hosted)</td><td>Scrubbed technical reports, random account identifier</td></tr>
+    <tr><td>Resend</td><td>Sending our emails (e.g. support replies)</td><td>Email address and message content</td></tr>
+    <tr><td>Google Cloud</td><td>Backup label-text extraction when on-device reading is unavailable</td><td>The label image being read</td></tr>
+    <tr><td>Cloudflare</td><td>Serving product photos from a fast global network</td><td>Your device's IP address when an image loads - no account data</td></tr>
+  </table>
+  <p class="note">
+    Apple and Google act as independent services for sign-in and (when
+    subscriptions launch) payments - Nutovia never sees your payment details.
+    USDA FoodData Central is queried from our servers with the barcode only.
+  </p>
+
+  <h2>How long we keep things</h2>
+  <ul>
+    <li><strong>Profiles, scans, stores:</strong> for as long as your account exists. Deleting your account removes all of it, immediately and permanently.</li>
+    <li><strong>Usage statistics:</strong> 90 days.</li>
+    <li><strong>Permission records:</strong> for as long as your account exists; deleted with the account.</li>
+    <li><strong>Anonymous catalog contributions</strong> (nutrition facts with no personal information) may be retained for everyone's benefit.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>
+    Wherever you live, you can access, export, correct, and delete your data -
+    the first three from inside the app, deletion in one step from Settings.
+    If you are in the UK or EU, you additionally have the rights set out in
+    the UK/EU GDPR (access, rectification, erasure, restriction, portability,
+    objection, and withdrawal of consent), and the right to complain to a
+    supervisory authority - in the UK, the Information Commissioner's Office
+    (ico.org.uk). If you are in a US state with a consumer privacy law, you
+    have the rights it provides, including access, correction, and deletion;
+    we honour these for everyone, and we do not sell or share personal
+    information as those laws define it.
   </p>
 
   <h2>What we don't do</h2>
   <ul>
     <li>No advertising, and no advertising trackers.</li>
     <li>No selling or renting of personal data, ever.</li>
-    <li>No analytics profiles linked to your identity.</li>
+    <li>No third-party analytics - usage statistics stay on our own servers.</li>
+    <li>No brand can pay to change a score, a ranking, or a suggestion.</li>
   </ul>
 
   <h2>Your choices</h2>
   <ul>
-    <li><strong>Export:</strong> Settings → "Export my data" gives you a complete copy of your household's data at any time.</li>
+    <li><strong>Export:</strong> Settings &rarr; "Export my data" gives you a complete copy of your household's data at any time.</li>
     <li><strong>Correction:</strong> profiles and preferences can be edited or removed in the app at any time.</li>
   </ul>
 
@@ -83,28 +181,31 @@
   <p>
     You can delete your account and all household data directly in the app:
     <strong>Settings &rarr; Account &rarr; Delete my account</strong>. Deletion
-    is immediate and permanent - your account, family profiles, and scan
-    history are removed.
+    withdraws your health-data permission and is immediate and permanent -
+    your account, family profiles, and scan history are removed.
   </p>
   <p>
     If you can no longer access the app, email
-    <a href="mailto:support@nutovia.app?subject=Delete%20my%20Nutovia%20account">support@nutovia.app</a>
+    <a href="mailto:privacy@nutovia.app?subject=Delete%20my%20Nutovia%20account">privacy@nutovia.app</a>
     from the email address associated with your account with the subject
     "Delete my Nutovia account" and we will delete it within 30 days and
-    confirm by reply. Anonymous contributions to the shared product catalog
-    (nutrition facts with no personal information) may be retained.
+    confirm by reply.
   </p>
 
   <h2>Children</h2>
   <p>
-    Nutovia accounts are created by adults. Family profiles for children are
-    entered and controlled entirely by the account holder.
+    Nutovia is not directed at children, and accounts are created by adults.
+    Family profiles for children are entered and controlled entirely by the
+    account holder - a parent or guardian - as part of their own household's
+    data.
   </p>
 
   <h2>Changes</h2>
   <p>
-    If this policy changes materially, we will note it in the app and update
-    the date above.
+    This policy is versioned. If it changes materially, we will note it in the
+    app and update the version and date above; the permission you gave in the
+    app is likewise versioned, and a material change to what it covers means
+    we ask again rather than assume.
   </p>
 
   <h2>Terms</h2>
@@ -114,7 +215,7 @@
 
   <h2>Contact</h2>
   <p>
-    Questions about privacy: <a href="mailto:support@nutovia.app">support@nutovia.app</a>
+    Questions about privacy: <a href="mailto:privacy@nutovia.app">privacy@nutovia.app</a>
   </p>
 </body>
 </html>
