@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["QRHF98ZTJ3.app.nutovia.mobile"],
+        "components": [
+          {
+            "/": "/open",
+            "comment": "The Open Nutovia button in email. Opens the app at whatever screen the household last chose."
+          },
+          {
+            "/": "/open/*",
+            "comment": "Room for future targeted entry points under /open."
+          },
+          {
+            "/": "/p/*",
+            "comment": "Product share links. Not shipped yet - claimed now so enabling it later needs no rebuild."
+          }
+        ]
+      }
+    ]
+  }
+}

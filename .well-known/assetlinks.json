@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.nutovia.mobile",
+      "sha256_cert_fingerprints": [
+        "81:A5:51:C8:14:A9:96:07:EA:5A:E4:9C:EE:7E:C9:5A:18:3C:E5:98:40:E9:C0:93:AE:01:F9:C8:34:C9:EB:7F",
+        "44:DE:C5:FB:FD:7C:E3:8D:24:4D:7C:2B:DA:2D:1E:62:BD:EB:17:F3:E4:00:8D:11:91:4F:1B:CE:B6:27:9F:A4"
+      ]
+    }
+  }
+]
