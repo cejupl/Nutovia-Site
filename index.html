@@ -263,7 +263,13 @@
   .reveal.in { opacity: 1; transform: none; }
 
   /* steps */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; perspective: 1200px; }
+  /* Six columns so five cards sit evenly: the first three take two each,
+     and the last two are offset by one so the short row centres instead
+     of hanging left with a hole beside it. */
+  .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; margin-top: 48px; perspective: 1200px; }
+  .steps > .step { grid-column: span 2; }
+  .steps > .step:nth-child(4) { grid-column: 2 / span 2; }
+  .steps > .step:nth-child(5) { grid-column: 4 / span 2; }
   .step {
     background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 30px 26px; transition: transform 0.35s ease, background 0.35s ease;
@@ -281,7 +287,13 @@
   .step h3 { font-size: 1.12rem; margin-bottom: 10px; }
   .step p { color: var(--muted); font-size: 0.93rem; line-height: 1.6; }
   .step .num { color: rgba(255,255,255,0.14); font-family: "Sora"; font-weight: 800; font-size: 2rem; float: right; }
-  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) {
+    .steps { grid-template-columns: 1fr; }
+    /* the centring offsets above would strand cards off-grid in one column */
+    .steps > .step,
+    .steps > .step:nth-child(4),
+    .steps > .step:nth-child(5) { grid-column: 1; }
+  }
 
   /* barcode cube */
   .cube-wrap { perspective: 700px; width: 44px; height: 44px; }
@@ -608,7 +620,7 @@
   <div class="reveal">
     <div class="sec-eyebrow">How it works</div>
     <h2 class="sec-title">Scan. Score. Swap.</h2>
-    <p class="sec-sub">Three steps from "what is this?" to a better basket - built for real grocery aisles, not lab conditions.</p>
+    <p class="sec-sub">Three steps in the aisle, two more before you get there - built for real grocery shopping, not lab conditions.</p>
   </div>
   <div class="steps">
     <div class="step reveal">
@@ -628,6 +640,18 @@
       <div class="icon3d">🔁</div>
       <h3>Swap smarter</h3>
       <p>Below your healthy threshold? Nutovia ranks better products in the same category - starting with what's confirmed at the stores you shop - and one tap opens them in the store's own app.</p>
+    </div>
+    <div class="step reveal">
+      <span class="num">04</span>
+      <div class="icon3d">🛍️</div>
+      <h3>Shop from a list, not the shelf</h3>
+      <p>With Nutovia+, search 850,000+ scored products by name, brand or shelf and drop what you want onto a list for each store you use. Every item carries its family score, so the basket is decided before you walk in - and what is already in the cupboard stays marked as stocked.</p>
+    </div>
+    <div class="step reveal">
+      <span class="num">05</span>
+      <div class="icon3d">✦</div>
+      <h3>Ask when the catalog can't answer</h3>
+      <p>Nothing found, or nothing good enough? AI Assist researches the product on the web and goes looking for alternatives worth the swap. Those results are clearly marked, carry their sources, and are held to a lower level of trust than the databases above.</p>
     </div>
   </div>
 </section>
