@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>You have been invited to Nutovia</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 560px; margin: 0 auto; padding: 32px 20px 64px;
+      line-height: 1.6; color: #1c2b22; background: #fbfdfb;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e6ece8; background: #0e1512; }
+      a { color: #6fd39a; }
+      .store { border-color: #2a3a30; }
+    }
+    h1 { font-size: 1.6rem; margin: 16px 0 4px; text-wrap: balance; }
+    a { color: #1b9e4b; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1b9e4b; font-size: 1.15rem; }
+    .brand img { width: 30px; height: 29px; }
+    .leaf { display: block; width: 96px; height: 96px; margin: 24px auto 0; }
+    .button {
+      display: inline-block; background: #1b9e4b; color: #fff; text-decoration: none;
+      padding: 12px 20px; border-radius: 8px; font-weight: 600; margin: 8px 0 16px;
+    }
+    .stores { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 24px; }
+    .store {
+      display: inline-block; padding: 10px 16px; border: 1px solid #d5e3d9; border-radius: 10px;
+      text-decoration: none; color: inherit; font-weight: 600;
+    }
+    .store.soon { opacity: 0.6; pointer-events: none; }
+    .muted { color: #6b7a71; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="brand"><img src="/email-logo.png" alt="" /> Nutovia</div>
+
+  <!-- The page an invite email's button lands on. It carries the
+       invitation's code (?ref=) into the app-open link so a friend who
+       signs up is counted against the invitation that brought them.
+       Store links are placeholders until both listings are live. -->
+
+  <img class="leaf" src="/email/welcome@2x.v4.png" alt="" />
+  <h1>A friend thinks you would like Nutovia.</h1>
+  <p>
+    Nutovia reads food labels for you. Point your phone at any packaged product and
+    you get two scores out of 100, one for the product and one for you, with the
+    reasons behind them, a warning when something does not suit you, and better
+    alternatives from the same shelf. Free to use, a minute to set up.
+  </p>
+
+  <p><a class="button" id="open" href="https://nutovia.app/open">Already have Nutovia? Open it</a></p>
+
+  <p><strong>Get the app</strong></p>
+  <div class="stores">
+    <!-- PLACEHOLDER: replace href with the App Store listing when live -->
+    <a class="store soon" href="#" aria-disabled="true">App Store: coming soon</a>
+    <!-- PLACEHOLDER: replace href with the Play Store listing when live -->
+    <a class="store soon" href="#" aria-disabled="true">Google Play: coming soon</a>
+  </div>
+
+  <p class="muted">
+    Open this page on your phone once the app is installed and the button above
+    takes you straight in. <a href="https://nutovia.app/">See what Nutovia does</a>.
+  </p>
+
+  <script>
+    // carry the invitation's code into the app-open link, unchanged
+    (function () {
+      var ref = new URLSearchParams(location.search).get('ref') || '';
+      if (/^[A-Z2-9]{6,12}$/i.test(ref)) {
+        document.getElementById('open').href =
+          'https://nutovia.app/open?ref=' + encodeURIComponent(ref.toUpperCase());
+      }
+    })();
+  </script>
+</body>
+</html>
