@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>How the Nutovia score works</title>
-<meta name="description" content="How Nutovia turns a nutrition label into a 0-100 score: the Nutri-Score 2023 base, the processing and additive adjustments it leaves out, the ten measures behind every product, and what we can still get wrong." />
-<meta property="og:title" content="How the Nutovia score works" />
-<meta property="og:description" content="Two products, almost identical sugar, scores of 11 and 88. Here is exactly why - and what we can still get wrong." />
+<title>Questions, answered - Nutovia</title>
+<meta name="description" content="Straight answers about Nutovia: who pays for it, what is free, how the score is built, what it can and cannot tell you about allergens, and where the product data comes from." />
+<meta property="og:title" content="Questions, answered - Nutovia" />
+<meta property="og:description" content="Can a brand pay for a better score? What is free? Can I rely on it for an allergy? The honest answers, in order." />
 <meta property="og:image" content="https://nutovia.app/logo.png" />
-<meta property="og:url" content="https://nutovia.app/scoring.html" />
+<meta property="og:url" content="https://nutovia.app/faq.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -287,6 +287,42 @@
     .band-row { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
+
+<style>
+  .qa-list { margin-top: 26px; display: grid; gap: 12px; max-width: 46rem; }
+  .qa {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .qa[open] { background: var(--panel-strong); }
+  .qa summary {
+    cursor: pointer;
+    font-family: 'Sora', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after {
+    content: '+';
+    margin-left: auto;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  .qa[open] summary::after { content: '\2212'; }
+  .qa summary:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+  .qa p { margin: 12px 0 0; color: var(--muted); line-height: 1.62; max-width: 60ch; }
+  .qa p a { color: var(--green); }
+  @media (prefers-reduced-motion: reduce) { .reveal { transition: none; } }
+</style>
 </head>
 <body>
 <div class="grain"></div>
@@ -295,7 +331,7 @@
   <a class="brand" href="index.html"><img src="logo.png" alt="Nutovia logo" /> Nutovia</a>
   <div class="nav-links">
     <a href="index.html#how">How it works</a>
-    <a href="index.html#why">Scoring</a>
+    <a href="scoring.html">Scoring</a>
     <a href="index.html#pricing">Pricing</a>
     <a href="privacy.html">Privacy</a>
   </div>
@@ -304,284 +340,139 @@
 
 <section id="top">
   <div class="reveal">
-    <div class="sec-eyebrow">Methodology</div>
-    <h2 class="sec-title" style="max-width:30rem;">How the Nutovia score works.</h2>
+    <div class="sec-eyebrow">Questions</div>
+    <h2 class="sec-title" style="max-width:30rem;">Questions, answered.</h2>
     <p class="lede" style="margin-top:18px;">
-      Every product gets one number between 0 and 100, built from its label and nothing
-      else. <b>No brand pays to change it.</b> This page explains exactly how that number
-      is made, shows two real examples end to end, and sets out the things it can still
-      get wrong.
+      The ones worth asking first, in the order they matter: who pays for this, what
+      costs nothing, how the number is built, and where it stops. <b>Where the answer is
+      a limitation, it says so.</b>
     </p>
-    <div class="band-row">
-      <div class="band"><span class="n" style="color:#038141">70 - 100</span><span class="w">Excellent</span></div>
-      <div class="band"><span class="n" style="color:#85BB2F">50 - 69</span><span class="w">Good</span></div>
-      <div class="band"><span class="n" style="color:#EE8100">30 - 49</span><span class="w">Mediocre</span></div>
-      <div class="band"><span class="n" style="color:#E63E11">0 - 29</span><span class="w">Poor</span></div>
-    </div>
   </div>
 </section>
 
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Start here</div>
-    <h2 class="sec-title">Two products. Almost identical sugar. Scores of 11 and 88.</h2>
-    <p class="sec-sub">
-      This is the whole method in one comparison. Both carry about 37g of sugar per 100g.
-      One scores 11, the other 88 - and every point of that gap is explainable.
-    </p>
+<section class="reveal">
+  <div class="sec-eyebrow">Independence</div>
+  <h2 class="sec-title" style="max-width:34rem;">Money, and who it comes from</h2>
+  <div class="qa-list">
+      <details class="qa">
+        <summary>Can a brand pay for a better score?</summary>
+        <p>No. There is no mechanism for it, because there is nobody to pay. Nutovia takes no advertising, no sponsorship and no brand money of any kind. Every score is built from the product's own label and the same rules applied to everything else on the shelf.</p>
+      </details>
+      <details class="qa">
+        <summary>Then how does Nutovia make money?</summary>
+        <p>From the people who use it. Scanning and scores are free; Nutovia+ is a paid membership for the proactive tools - searching the whole catalogue, several family profiles, store matching. That is the entire business model, and it is why the only side we are on is yours.</p>
+      </details>
+      <details class="qa">
+        <summary>Do you sell my data?</summary>
+        <p>No. We do not sell it, share it for advertising, or build a business on it. What you scan and who is in your household is health information, and it is treated that way. The <a href="privacy.html">Privacy Policy</a> is the long version.</p>
+      </details>
+      <details class="qa">
+        <summary>What are you actually trying to do?</summary>
+        <p>Help our community eat better. That is the goal the rest of this follows from - if it ever conflicted with making more money, the goal wins, which is exactly the choice that staying independent keeps open.</p>
+      </details>
   </div>
-
-  <div class="versus reveal">
-    <div class="vcard bad">
-      <div class="vhead">
-        <span class="vname">Frosted flakes cereal</span>
-        <span class="vkind">Illustrative</span>
-      </div>
-      <div class="vscore" style="color:#E63E11">11<small> / 100</small></div>
-      <div class="vsub">Nutri-Score E</div>
-      <ul class="vfacts">
-        <li><span>Sugar</span><b>37g</b></li>
-        <li><span>Of which added</span><b>36g</b></li>
-        <li><span>Fibre</span><b>1.8g</b></li>
-        <li><span>Salt</span><b>1.1g</b></li>
-        <li><span>Processing</span><b>NOVA 4, ultra-processed</b></li>
-        <li><span>Additives</span><b>Colour, antioxidant</b></li>
-      </ul>
-    </div>
-
-    <div class="vcard good">
-      <div class="vhead">
-        <span class="vname">Banana Bread Bar</span>
-        <span class="vkind">Real product</span>
-      </div>
-      <div class="vscore" style="color:#038141">88<small> / 100</small></div>
-      <div class="vsub">Nutri-Score C</div>
-      <ul class="vfacts">
-        <li><span>Sugar</span><b>37.8g</b></li>
-        <li><span>Of which added</span><b>none</b></li>
-        <li><span>Fibre</span><b>8.9g</b></li>
-        <li><span>Salt</span><b>0g</b></li>
-        <li><span>Processing</span><b>NOVA 1, whole food</b></li>
-        <li><span>Additives</span><b>None</b></li>
-      </ul>
-    </div>
+</section>
+<section class="reveal">
+  <div class="sec-eyebrow">Free</div>
+  <h2 class="sec-title" style="max-width:34rem;">What you get without paying</h2>
+  <div class="qa-list">
+      <details class="qa">
+        <summary>What is free, forever?</summary>
+        <p>Scanning any product, both of its scores and every reason behind them, healthier alternatives for anything you scan, reading a label with the camera, one profile, your fifty most recent products, searching your own history, and exporting your data. A score nobody can read is not a free tier, it is a demo.</p>
+      </details>
+      <details class="qa">
+        <summary>What does Nutovia+ add?</summary>
+        <p>The proactive side: searching and browsing the whole catalogue before you buy, up to seven family profiles, My Stores with store matching, your full history kept forever, and on-demand AI research when the catalogue comes up short. Scanning what is already in your hand stays free, always.</p>
+      </details>
+      <details class="qa">
+        <summary>Why is search paid but scanning free?</summary>
+        <p>Scanning answers "is the thing in my hand any good?" - the honest core, and never behind a paywall. Browsing the catalogue before anything reaches the trolley is a shopping tool rather than an answer, and it is what the membership sells.</p>
+      </details>
+      <details class="qa">
+        <summary>Do I need an account?</summary>
+        <p>Yes, because your profiles, history and stores follow you between devices and have to live somewhere. You can delete the account and everything in it at any time, from Settings or from <a href="delete-account.html">this page</a>.</p>
+      </details>
   </div>
-
-  <div class="pull reveal">
-    A model that only counted sugar would score these the same. A model that only counted
-    processing would ignore the sugar entirely. <b>Nutovia counts both, shows you both, and
-    lets you decide</b> - the bar is still 37.8g of sugar, and its scorecard says so in
-    plain words.
+</section>
+<section class="reveal">
+  <div class="sec-eyebrow">Scores</div>
+  <h2 class="sec-title" style="max-width:34rem;">The number, and what it means</h2>
+  <div class="qa-list">
+      <details class="qa">
+        <summary>Why do I see two scores?</summary>
+        <p>One is the product's own - a neutral 0-100 that is the same for everybody. The other is yours, which takes the first and applies your household's allergens, diets, goals and avoid lists. A product can be excellent in general and wrong for you specifically, and one number cannot say both.</p>
+      </details>
+      <details class="qa">
+        <summary>Where does the score come from?</summary>
+        <p>The label, and nothing else. It starts from the Nutri-Score 2023 model and adds what that model leaves out - how processed a food is, and certain additives. <a href="scoring.html">How scoring works</a> shows two real products end to end, including what it can still get wrong.</p>
+      </details>
+      <details class="qa">
+        <summary>A score looks wrong to me. What now?</summary>
+        <p>Tell us - there is a "report a data issue" link on every product page. Usually it means the underlying label data is wrong or incomplete rather than the maths, and that is fixable. We would rather hear it than have you quietly stop trusting the number.</p>
+      </details>
+      <details class="qa">
+        <summary>Do scores change over time?</summary>
+        <p>Only in planned, announced batches, or when a product's own label data changes or improves. A product you scanned last month scores the same today, and when the model itself changes we say so before it happens.</p>
+      </details>
   </div>
+</section>
+<section class="reveal">
+  <div class="sec-eyebrow">Allergens</div>
+  <h2 class="sec-title" style="max-width:34rem;">Safety, and its limits</h2>
+  <div class="qa-list">
+      <details class="qa">
+        <summary>Can I rely on Nutovia for a serious allergy?</summary>
+        <p>No - and no app should ask you to. Nutovia reads the ingredient list it holds, which can be out of date, incomplete, or missing entirely for a product. It is a good first filter and a bad last word. <b>Always read the packet</b> for anything that could send someone to hospital.</p>
+      </details>
+      <details class="qa">
+        <summary>What does "traces" mean here?</summary>
+        <p>May-contain warnings, which are a manufacturer's caution rather than an ingredient. Each profile chooses whether those block a product, because households genuinely differ on it - some avoid every trace warning, others eat them daily.</p>
+      </details>
+      <details class="qa">
+        <summary>Why do Halal and Kosher say "inferred"?</summary>
+        <p>Because that is what they are. We read the ingredients for things that would rule a product out, which is not the same as certification by an authority. If certification matters to you, the certificate on the packet is the answer, not us.</p>
+      </details>
+      <details class="qa">
+        <summary>What about additives?</summary>
+        <p>Flagged ones are shown with a plain-English fact and a source, grouped as restricted somewhere, worth watching, or reviewed and fine. They are deliberately informational and never part of the score - a regulatory fact is not a nutrition measurement.</p>
+      </details>
+  </div>
+</section>
+<section class="reveal">
+  <div class="sec-eyebrow">Data</div>
+  <h2 class="sec-title" style="max-width:34rem;">Where the products come from</h2>
+  <div class="qa-list">
+      <details class="qa">
+        <summary>Where does the product data come from?</summary>
+        <p>Open Food Facts, a public collaborative database, plus the USDA's branded food data, mirrored and cleaned on our side. Roughly 850,000 products across the United States, United Kingdom, Canada and Ireland.</p>
+      </details>
+      <details class="qa">
+        <summary>Why is a product missing, or missing its nutrition?</summary>
+        <p>Because nobody has added it yet, or added it without the label. That is the honest cost of open data. Scanning an unknown product queues it for a background fill, which is free for everyone; Nutovia+ can research one on demand instead of waiting.</p>
+      </details>
+      <details class="qa">
+        <summary>Which countries does it work in?</summary>
+        <p>The United States, the United Kingdom, Canada and Ireland today. A barcode from elsewhere often still resolves, but the catalogue, the stores and the retailer links are built for those four.</p>
+      </details>
+      <details class="qa">
+        <summary>Does it work offline?</summary>
+        <p>Partly. Products you have already scanned stay readable, and the app tells you plainly when it cannot reach the network rather than blaming your connection for a problem at our end.</p>
+      </details>
+  </div>
+</section>
 
-  <p class="sec-sub reveal" style="margin-top:26px;">
-    Note the Nutri-Score column. The bar earns a C there and an 88 here: Nutri-Score
-    penalises its sugar and fat without crediting that it is three whole ingredients. That
-    gap is not a disagreement with the regulator - but it is precisely what Nutovia
-    fills. Both scores appear on every product - you can see when they differ and why.
-    <em>The cereal is a representative label rather than a named brand; its score is not
-    invented, it is what the engine returns for those values.</em>
+<section class="reveal">
+  <div class="sec-eyebrow">Still stuck</div>
+  <h2 class="sec-title" style="max-width:30rem;">Ask us directly.</h2>
+  <p class="lede" style="margin-top:18px;">
+    If your question is not here, it probably should be. Email
+    <a href="mailto:support@nutovia.app" style="color:var(--green)">support@nutovia.app</a>
+    and we will answer you - and add it to this page if it is a question other people
+    are likely to have too.
   </p>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">The recipe</div>
-    <h2 class="sec-title">Four steps, in this order.</h2>
-  </div>
-  <div class="steps-num">
-    <div class="stepline reveal">
-      <span class="idx">01</span>
-      <div>
-        <h3>Start from the official model</h3>
-        <p>The base is Nutri-Score 2023, the algorithm used by European food agencies. We
-        did not invent it, we do not tune it, and we show its grade on every product. It
-        weighs energy, sugar, saturated fat and salt against fibre, protein and
-        fruit-and-vegetable content.</p>
-      </div>
-    </div>
-    <div class="stepline reveal">
-      <span class="idx">02</span>
-      <div>
-        <h3>Adjust for processing</h3>
-        <p>Nutri-Score is blind to how a food was made. Nutovia is not. A NOVA group 4
-        ultra-processed product carries a penalty a whole food does not, which is most of
-        the 77-point gap in the comparison above.</p>
-      </div>
-    </div>
-    <div class="stepline reveal">
-      <span class="idx">03</span>
-      <div>
-        <h3>Adjust for additives</h3>
-        <p>Cosmetic additives - colours, sweeteners, texture agents present to make a
-        product look or taste like something it is not - reduce the score. Additives that
-        do a genuine job of preservation or fortification do not.</p>
-      </div>
-    </div>
-    <div class="stepline reveal">
-      <span class="idx">04</span>
-      <div>
-        <h3>Apply a small number of hard rules</h3>
-        <p>A few cases should never be decided by arithmetic alone. Industrial trans fat
-        caps a score however good the rest of the label is. Plain water and plain tea are
-        not penalised for having no nutrients. Every one of these rules is fixed,
-        published, and applies to every product equally.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">What we measure</div>
-    <h2 class="sec-title">Ten measures, each on a scale you can see.</h2>
-    <p class="sec-sub">
-      Every product page shows where it actually lands on each one, not just whether it
-      passed. The thresholds are borrowed from published standards rather than chosen by
-      us: UK FSA traffic lights for sugar, salt and fat; EU nutrition-claim thresholds for
-      fibre and protein; the NOVA classification for processing.
-    </p>
-  </div>
-  <div class="measure-grid reveal">
-    <div class="measure"><b>Sugar</b><span>Total sugar per 100g, on the FSA scale.</span></div>
-    <div class="measure"><b>Added sugar</b><span>Sugar put in, separated from sugar that came with the fruit.</span></div>
-    <div class="measure"><b>Saturated fat</b><span>The fat fraction that matters most for heart health.</span></div>
-    <div class="measure"><b>Salt</b><span>Sodium converted to salt, per 100g.</span></div>
-    <div class="measure"><b>Fibre</b><span>Credited, not just tolerated - more is better.</span></div>
-    <div class="measure"><b>Protein</b><span>Credited against the EU "source of protein" threshold.</span></div>
-    <div class="measure"><b>Calories</b><span>Energy density, judged per realistic serving.</span></div>
-    <div class="measure"><b>Processing</b><span>NOVA group, from whole food to ultra-processed.</span></div>
-    <div class="measure"><b>Additives</b><span>Cosmetic additives counted; functional ones not.</span></div>
-    <div class="measure"><b>Whole-food content</b><span>Fruit, vegetable, legume and nut content.</span></div>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Your score</div>
-    <h2 class="sec-title">The product score is the same for everyone. Yours is not.</h2>
-    <p class="sec-sub">
-      The 0-100 above is a property of the food. Your score adds who is eating it. Same
-      bar, one household:
-    </p>
-  </div>
-  <div class="score-why reveal" style="grid-template-columns:1fr;">
-    <div class="fam-panel" style="background:transparent;border:0;padding:0;">
-      <div class="fam-row">
-        <span class="fam-who">Ada<span class="fam-why">Watching sugar - 37.8g is very high, even from fruit</span></span>
-        <span class="fam-delta down">-18</span>
-      </div>
-      <div class="fam-row">
-        <span class="fam-who">Sam<span class="fam-why">Building muscle - 11.1g protein is a solid source</span></span>
-        <span class="fam-delta up">+8</span>
-      </div>
-      <div class="fam-row">
-        <span class="fam-who">Leo<span class="fam-why">Tree-nut allergy - contains almonds</span></span>
-        <span class="fam-delta stop">Avoid</span>
-      </div>
-      <p class="fam-foot">
-        Goals move a score by a bounded amount, so your profile adjusts a number without
-        replacing it - the food's own nutrition always carries most of the weight. An
-        allergen is different in kind: it is a hard stop, not a deduction, and no amount
-        of good nutrition overrides it.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Provenance</div>
-    <h2 class="sec-title">You can always see where a number came from.</h2>
-    <p class="sec-sub">
-      Every scan replays its own search: which database answered, what was missing, and
-      whether anything was inferred. Four sources, in order of confidence - the Nutovia
-      catalog, Open Food Facts, USDA FoodData Central, and last of all AI web research,
-      which is labelled as such and held to a lower level of trust. A product scored from
-      thin data is never presented as though it were scored from a complete label.
-    </p>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Validation</div>
-    <h2 class="sec-title">How we know the number holds up.</h2>
-    <p class="sec-sub">
-      The scoring engine is frozen against a locked set of 1,999 products: any change that
-      moves a single one of those scores fails the build before it can ship. The catalog
-      is scored in full - every one of its 930,000+ products - so the distribution can be
-      inspected rather than assumed.
-    </p>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Honesty</div>
-    <h2 class="sec-title">What the score can still get wrong.</h2>
-    <p class="sec-sub">
-      Every scoring system has failure modes. Most do not publish them. Here are ours.
-    </p>
-  </div>
-  <div class="limits reveal">
-    <div class="limit">
-      <b>A label can be wrong before we ever see it</b>
-      <span>Much of the world's food data is crowdsourced, and a mistyped sugar figure
-      produces a confident, wrong score. This is the failure mode you can fix for us -
-      see below.</span>
-    </div>
-    <div class="limit">
-      <b>Per 100g is not per portion</b>
-      <span>Scores are computed per 100g so products can be compared honestly. That is the
-      right basis for comparison and the wrong basis for a meal - a small amount of a
-      low-scoring food may matter less than a large amount of a high-scoring one.</span>
-    </div>
-    <div class="limit">
-      <b>Two decimal places of confidence we do not have</b>
-      <span>A 0-100 scale implies a precision nutrition science does not offer. Treat a
-      gap of two points as noise, and a gap of twenty as real.</span>
-    </div>
-    <div class="limit">
-      <b>Categories at the edges</b>
-      <span>Foods that do not sit neatly in a category - fermented products, traditional
-      preparations, foods eaten in very small quantities - are the hardest to place, and
-      the most likely to need adjustment as the model improves.</span>
-    </div>
-    <div class="limit">
-      <b>It is not medical advice</b>
-      <span>Nutovia is general wellness guidance built on public nutrition data. It does
-      not know your bloodwork, your medication or your doctor's advice, and it is not a
-      substitute for any of them.</span>
-    </div>
-  </div>
-
-  <div class="fixit reveal">
-    <div class="fixit-flag" aria-hidden="true">&#9873;</div>
-    <div>
-      <b>Found something wrong? Tell us - it takes seconds.</b>
-      <span>Every product in the app has a <em>Report a data issue</em> link. Say what
-      looks wrong - the nutrition, the ingredients, or the product itself - and a person
-      reviews it. Every correction improves that product for everyone who scans it next.
-      It is the single most useful thing you can do for the accuracy of the score.</span>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="reveal">
-    <div class="sec-eyebrow">Stability</div>
-    <h2 class="sec-title">The number will not move under you.</h2>
-    <p class="sec-sub">
-      Scores change only in versioned, announced batches - never quietly and never
-      continuously. A product you scanned last month scores the same today unless its
-      label changed or its data improved, and when the model itself changes we say so
-      before it happens.
-    </p>
-    <div class="cta-row" style="margin-top:30px;">
-      <a class="btn-primary" href="index.html#get">&#63743; Get Nutovia</a>
-      <a class="btn-ghost" href="index.html#pricing">See pricing</a>
-    </div>
+  <div class="cta-row" style="margin-top:30px;">
+    <a class="btn-primary" href="index.html#get">&#63743; Get Nutovia</a>
+    <a class="btn-ghost" href="scoring.html">How scoring works</a>
   </div>
 </section>
 
@@ -589,7 +480,6 @@
   <div class="brand" style="font-size:1rem;"><img src="logo.png" alt="" style="width:26px;height:26px;" /> Nutovia</div>
   <div class="foot-links">
     <a href="index.html">Home</a>
-    <a href="faq.html">Questions</a>
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms of Use</a>
     <a href="mailto:support@nutovia.app">Contact</a>
