@@ -264,6 +264,26 @@
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.in { opacity: 1; transform: none; }
 
+  /* creed: the motto and the two lines it rests on, as a rule between
+     the hero and the product walk-through. Not a card - a strip. */
+  .creed { padding-top: 0; padding-bottom: 0; }
+  .creed-inner {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 40px 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center;
+  }
+  .creed-motto { font-family: "Sora", sans-serif; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.15; margin: 0; text-wrap: balance; }
+  .creed-motto .grad {
+    background: linear-gradient(100deg, #7ee2a8, var(--green) 40%, #b8e986);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .creed-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0; }
+  .creed-pairs dt { color: var(--green); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .creed-pairs dd { margin: 0; font-weight: 600; font-size: 1.02rem; line-height: 1.4; }
+  @media (max-width: 860px) {
+    .creed-inner { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+    .creed-pairs { grid-template-columns: 1fr; gap: 18px; }
+  }
+
   /* steps */
   /* Six columns so five cards sit evenly: the first three take two each,
      and the last two are offset by one so the short row centres instead
@@ -618,6 +638,16 @@
     <div class="float-chip fc4"><span class="big">✨</span><div>3 healthier swaps<small>at your stores</small></div></div>
   </div>
 </header>
+
+<section class="creed" aria-label="What Nutovia stands for">
+  <div class="creed-inner reveal">
+    <p class="creed-motto">Before you buy&nbsp;it, <span class="grad">Nutovia</span>&nbsp;it.</p>
+    <dl class="creed-pairs">
+      <div><dt>Our goal</dt><dd>A healthier community.</dd></div>
+      <div><dt>Our promise</dt><dd>Independent and honest, always.</dd></div>
+    </dl>
+  </div>
+</section>
 
 <section id="how">
   <div class="reveal">
