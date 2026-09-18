@@ -5,7 +5,8 @@ The marketing site and privacy policy for [Nutovia](https://nutovia.app) - a fre
 Static HTML/CSS/JS, no build step. Served by GitHub Pages from the repository root with the custom domain `nutovia.app` (see `CNAME`).
 
 - `index.html` - landing page
-- `privacy.html` - privacy policy (also the data-deletion instructions URL)
+- `privacy.html` - privacy policy
+- `delete-account.html` - the data-deletion instructions URL the stores ask for
 - `open/index.html` - web fallback for the `/open` deep link, shown only to visitors without the app
 
 ## Deep links
