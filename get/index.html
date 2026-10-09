@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Get Nutovia</title>
+  <meta name="robots" content="noindex" />
+  <!--
+    One link that lands in the right place.
+
+    Ads can only carry a single URL, but a store link is wrong for half
+    the audience: an Android user tapping an App Store link gets a page
+    they cannot use. The alternative is sending everyone to the home
+    page, which works but costs a tap - and in an ad, a tap is most of
+    what you paid for.
+
+    So this page picks. It redirects before anything paints, so nobody
+    sees it; on a phone the store app itself opens.
+
+    The useful side effect is that the destination now lives here rather
+    than inside an ad. A new country, a web app, a seasonal campaign -
+    change this file, and every ad, bio link, QR code and email that
+    already points at /get follows along without being edited.
+
+    location.replace, not href: it leaves no history entry, so the back
+    button returns people to where they came from rather than bouncing
+    them through here again.
+
+    Deliberately no tracking of any kind. This is the page an ad points
+    at, which is exactly where a pixel would normally go - and the app
+    promises no advertising SDKs and no data brokers. A redirect that
+    quietly logged every visitor would be the same promise broken one
+    layer out.
+  -->
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: #fbfdfb; color: #1c2b22; text-align: center; padding: 24px;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0e1512; color: #e6ece8; }
+      .store { border-color: #2a3a31; }
+    }
+    h1 { font-size: 1.3rem; margin: 0 0 8px; }
+    p { color: #6b7a71; margin: 0 0 24px; }
+    .store {
+      display: block; margin: 10px auto; max-width: 280px;
+      padding: 14px 20px; border: 1px solid #d7e2da; border-radius: 10px;
+      text-decoration: none; color: inherit; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Getting Nutovia&hellip;</h1>
+    <p>Taking you to your app store.</p>
+    <!-- Shown only if the redirect has not already happened: a slow
+         connection, a browser with JavaScript off, or a desktop. Never
+         a dead end. -->
+    <a class="store" href="https://apps.apple.com/app/id6792972330">Download on the App Store</a>
+    <a class="store" href="https://play.google.com/store/apps/details?id=app.nutovia.mobile">Get it on Google Play</a>
+    <p style="margin-top:20px;font-size:.85rem;">Available in the United States and the United Kingdom.</p>
+  </main>
+  <script>
+    (function () {
+      var APP_STORE = 'https://apps.apple.com/app/id6792972330';
+      var PLAY = 'https://play.google.com/store/apps/details?id=app.nutovia.mobile';
+      var ua = navigator.userAgent || '';
+      // iPadOS 13+ reports itself as a Mac, and the only reliable tell
+      // is that it has a touch screen - without this check, every iPad
+      // would fall through to the desktop branch.
+      var iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+      if (/iPhone|iPad|iPod/.test(ua) || iPadOS) {
+        location.replace(APP_STORE);
+      } else if (/Android/.test(ua)) {
+        location.replace(PLAY);
+      }
+      // Desktop falls through on purpose: someone on a laptop cannot
+      // install anything, so they get the two buttons above and can
+      // open whichever store they recognise.
+    })();
+  </script>
+</body>
+</html>
